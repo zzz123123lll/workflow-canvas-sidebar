@@ -10,7 +10,7 @@ Built-in starters: sources to article, a configurable 30-second motion-graphics 
 
 The tested baseline is Windows 11 x64 with DeepSeek Harness 0.2.1-rc.5. Install and open Harness once.
 
-**Marketplace package, after the npm candidate is published:** add `dsh-workflow-canvas-sidebar@0.17.0-rc.2` in Harness → Plugins → Add Plugin, or run:
+**Marketplace package:** add `dsh-workflow-canvas-sidebar@0.17.0-rc.2` in Harness → Plugins → Add Plugin, or run:
 
 ```powershell
 dsh plugin --profile desktop add dsh-workflow-canvas-sidebar@0.17.0-rc.2

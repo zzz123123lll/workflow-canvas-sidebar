@@ -21,13 +21,13 @@
 
 受测平台为 Windows 11 x64，宿主基线 DeepSeek Harness 0.2.1-rc.5。请先安装并启动 Harness 一次。
 
-**市场渠道（npm 候选发布后）**：在 Harness「插件 → 添加插件」填写 `dsh-workflow-canvas-sidebar@0.17.0-rc.2`，或运行：
+**市场渠道**：在 Harness「插件 → 添加插件」填写 `dsh-workflow-canvas-sidebar@0.17.0-rc.2`，或运行：
 
 ```powershell
 dsh plugin --profile desktop add dsh-workflow-canvas-sidebar@0.17.0-rc.2
 ```
 
-重启 Harness 后打开“画布”。市场包包含 Python 和锁定依赖，无需额外运行 `install.cmd`，也没有安装时自动执行的 `install` / `postinstall` 脚本。RC2 使用 npm 的 `next` 候选标签，请明确指定版本；尚未获市场收录时，可以先用已发布的 ZIP。
+重启 Harness 后打开“画布”。市场包包含 Python 和锁定依赖，无需额外运行 `install.cmd`，也没有安装时自动执行的 `install` / `postinstall` 脚本。RC2 使用 npm 的 `next` 候选标签，请明确指定版本；现在可直接按包名安装，市场收录进度见[申请 #201](https://github.com/polang233/dsh-plugin-index/issues/201)。
 
 **ZIP 渠道**：先安装免费的 PowerShell 7，然后：
 
