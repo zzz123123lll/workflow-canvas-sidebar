@@ -227,13 +227,40 @@ async function testWorkspaceUsesSelectedRun() {
   assert.equal(seen.at(-1).messages[0].text, 'real question');
 }
 
+async function testCustomModuleFormSavesItsDeclaredContract() {
+  const calls = [], added = [];
+  const context = { busy: false,
+    moduleForm: { name: 'module', instructions: 'do work', inputs: 'source/a.md\n source/b.json ',
+      outputs: 'episodes/{stem}-result.md\nepisodes/{stem}-result.json', timeout: '900', checklist: 'Read inputs\nWrite outputs' },
+    setBusy() {}, setModuleError() {}, setModules() {}, setSearch() {}, setModuleForm() {}, setHelpModule() {}, setMsg() {},
+    addFromPalette(value) { added.push(value); },
+    postJson(url, body) { calls.push({url, body: JSON.parse(JSON.stringify(body))}); return Promise.resolve({module:{id:'saved'}, modules:[]}); }
+  };
+  const start = source.indexOf('      function createLibraryModule(');
+  const end = source.indexOf('      async function deleteLibraryModule(', start);
+  vm.runInNewContext(source.slice(start, end), context);
+  context.createLibraryModule(false);
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(calls[0].url, '/modules/create');
+  assert.deepEqual(calls[0].body.requires, ['source/a.md','source/b.json']);
+  assert.deepEqual(calls[0].body.artifacts, ['episodes/{stem}-result.md','episodes/{stem}-result.json']);
+  assert.equal(calls[0].body.timeout_seconds, '900');
+  context.moduleForm.editingId = 'existing';
+  context.createLibraryModule(false);
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(calls[1].url, '/modules/update');
+  assert.equal(calls[1].body.id, 'existing');
+  assert.equal(added.length, 0, 'editing must not create another canvas instance');
+}
+
 Promise.resolve().then(testFailedSaveCannotStartRun).then(testBodyErrorIsNotSuccess)
   .then(testKnowledgeRequestsCarrySelectedTask).then(testLateKnowledgeResponseCannotReplaceNewPartition)
   .then(testHostRejectsUntrustedOrigins).then(testUnavailableExecutionServiceCannotFallBackToLegacyRunner)
   .then(testArtifactsLoadIntoPanel).then(testLateArtifactResponseCannotReplaceNewNode)
   .then(testMediaArtifactUsesStreamingUrl).then(testLateArtifactCannotReopenClosedDrawer)
   .then(testWorkspaceUsesSelectedRun)
-  .then(() => console.log('11 client behavior tests passed'))
+  .then(testCustomModuleFormSavesItsDeclaredContract)
+  .then(() => console.log('12 client behavior tests passed'))
   .catch(error => { console.error(error); process.exitCode = 1; });
 
 

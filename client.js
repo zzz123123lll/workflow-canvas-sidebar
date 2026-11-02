@@ -808,13 +808,26 @@ window.__ModuleLoader__.load({
       function createLibraryModule(addToCanvas) {
         if (!moduleForm || busy) return;
         setBusy(true); setModuleError("");
-        postJson("/modules/create", { name: moduleForm.name, instructions: moduleForm.instructions,
-          checklist: moduleForm.checklist.split("\n").map(function (s) { return s.trim(); }).filter(Boolean) })
+        function lines(value) { return String(value || '').split("\n").map(function (s) { return s.trim(); }).filter(Boolean); }
+        var payload = { name: moduleForm.name, instructions: moduleForm.instructions,
+          requires: lines(moduleForm.inputs), artifacts: lines(moduleForm.outputs),
+          timeout_seconds: moduleForm.timeout || null,
+          checklist: lines(moduleForm.checklist) };
+        if (moduleForm.editingId) payload.id = moduleForm.editingId;
+        postJson(moduleForm.editingId ? "/modules/update" : "/modules/create", payload)
           .then(function (r) {
             setModules(r.modules); setSearch(""); setModuleForm(null);
             if (addToCanvas) addFromPalette(r.module);
-            setMsg(addToCanvas ? "新模块已创建并加入画布，保存后可运行" : "新模块已存入模块库，点击即可加入画布");
+            setHelpModule(null);
+            setMsg(moduleForm.editingId ? "模块定义已更新，下一次执行使用新定义" : addToCanvas ? "新模块已创建并加入画布，保存后可运行" : "新模块已存入模块库，点击即可加入画布");
           }).catch(function (e) { setModuleError(e.message); }).finally(function () { setBusy(false); });
+      }
+
+      function editLibraryModule(module) {
+        setModuleError("");
+        setModuleForm({ name: module.name || '', instructions: module.agent_prompt || module.description || '',
+          inputs: (module.requires || []).join('\n'), outputs: (module.artifacts || []).join('\n'),
+          checklist: (module.checklist || []).join('\n'), timeout: String(module.timeout_seconds || module.timeout_sec || ''), editingId: module.id });
       }
 
       async function deleteLibraryModule(module) {
@@ -2456,6 +2469,7 @@ window.__ModuleLoader__.load({
               })(),
               h("div", { style: { marginTop: 12, display: "flex", gap: 6 } },
                 h("button", { onClick: function () { addFromPalette(helpModule); setHelpModule(null); }, style: { padding: "6px 10px", borderRadius: 7, border: "1px solid " + C.accent, background: C.accent, color: "#181207", cursor: "pointer", fontSize: 11, fontWeight: 700 } }, "添加到画布"),
+                helpModule.executor === 'agent' ? ToolButton('编辑模块定义', function () { editLibraryModule(helpModule); }) : null,
                 h("button", { onClick: function () { setHelpModule(null); }, style: { padding: "6px 10px", borderRadius: 7, border: "1px solid " + C.border, background: C.card, color: C.sub, cursor: "pointer", fontSize: 11 } }, "关闭")))
               : selNode ? h("div", null,
               h("div", { style: { display: "flex", alignItems: "center", gap: 8 } },
@@ -2643,9 +2657,9 @@ window.__ModuleLoader__.load({
             aiLog.map(function (x, i) { return h("div", { key: i, style: { fontSize: 9.5, color: C.sub, padding: "3px 6px", marginBottom: 3, borderRadius: 5, background: C.card, border: "1px solid " + C.borderSoft } }, x); })
           ) : null
         ) : null,
-        moduleForm ? h("div", { role: "dialog", "aria-modal": true, "aria-label": "新建模块", onKeyDown: function (e) { e.stopPropagation(); if (e.key === "Escape" && !busy) setModuleForm(null); },
+        moduleForm ? h("div", { role: "dialog", "aria-modal": true, "aria-label": moduleForm.editingId ? "编辑模块" : "新建模块", onKeyDown: function (e) { e.stopPropagation(); if (e.key === "Escape" && !busy) setModuleForm(null); },
           style: { position: "absolute", inset: 0, zIndex: 60, background: "rgba(0,0,0,.65)", display: "flex", alignItems: "center", justifyContent: "center", padding: 20 } },
-          h("form", { onSubmit: function (e) { e.preventDefault(); createLibraryModule(true); }, style: { width: 480, maxHeight: "90%", boxSizing: "border-box", overflow: "auto", background: C.panel, color: C.text, border: "1px solid " + C.border, borderRadius: 12, padding: 24, boxShadow: "0 16px 70px #000" } },
+          h("form", { onSubmit: function (e) { e.preventDefault(); createLibraryModule(!moduleForm.editingId); }, style: { width: 480, maxHeight: "90%", boxSizing: "border-box", overflow: "auto", background: C.panel, color: C.text, border: "1px solid " + C.border, borderRadius: 12, padding: 24, boxShadow: "0 16px 70px #000" } },
             h("h2", { style: { margin: "0 0 8px", fontSize: 19 } }, moduleForm.editingId ? "编辑模块" : "新建模块"),
             h("p", { style: { color: C.sub, fontSize: 12 } }, moduleForm.editingId ? "修改后，已放入画布的步骤会在下一次运行时使用新定义。" : "把你想让 DeepSeek 做的一步写下来，结果会自动保存为任务文档。"),
             [
@@ -2661,8 +2675,8 @@ window.__ModuleLoader__.load({
                 placeholder: field.placeholder, style: { display: "block", width: "100%", boxSizing: "border-box", marginTop: 7, padding: 10, borderRadius: 7, border: "1px solid " + C.border, background: C.bg, color: C.text, fontSize: 12, resize: "vertical" } })); }),
             moduleError ? h("p", { role: "alert", style: { color: C.danger, fontSize: 12 } }, moduleError) : null,
             h("div", { style: { display: "flex", gap: 8, marginTop: 20, flexWrap: "wrap" } },
-              h("button", { type: "submit", disabled: busy, style: { padding: "9px 12px", borderRadius: 7, border: "none", background: C.accent, color: C.bg, fontWeight: 700, cursor: "pointer" } }, busy ? "正在保存…" : "创建并加入画布"),
-              h("button", { type: "button", disabled: busy || !moduleForm.name.trim() || !moduleForm.instructions.trim(), onClick: function () { createLibraryModule(false); }, style: { padding: "9px 12px", borderRadius: 7, border: "1px solid " + C.border, background: C.card, color: C.text, cursor: "pointer" } }, "仅存入模块库"),
+              h("button", { type: "submit", disabled: busy, style: { padding: "9px 12px", borderRadius: 7, border: "none", background: C.accent, color: C.bg, fontWeight: 700, cursor: "pointer" } }, busy ? "正在保存…" : moduleForm.editingId ? "保存模块定义" : "创建并加入画布"),
+              !moduleForm.editingId ? h("button", { type: "button", disabled: busy || !moduleForm.name.trim() || !moduleForm.instructions.trim(), onClick: function () { createLibraryModule(false); }, style: { padding: "9px 12px", borderRadius: 7, border: "1px solid " + C.border, background: C.card, color: C.text, cursor: "pointer" } }, "仅存入模块库") : null,
               h("button", { type: "button", disabled: busy, onClick: function () { setModuleForm(null); }, style: { padding: "9px 12px", border: "none", background: "transparent", color: C.sub, cursor: "pointer" } }, "取消")))
         ) : null,
         guideOpen ? h("div", {
