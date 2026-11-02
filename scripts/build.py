@@ -38,7 +38,7 @@ def public_files():
     package = json.loads((ROOT / 'package.json').read_text(encoding='utf-8'))
     paths = {ROOT / 'package.json'}
     for pattern in package['files']:
-        if pattern.startswith('runtime/'):
+        if pattern.startswith('runtime/') or pattern in {'build-info.json', 'dependencies.json', 'asset-manifest.json'}:
             continue
         if pattern.endswith('/**'):
             paths.update(p for p in (ROOT / pattern[:-3]).rglob('*') if p.is_file())
@@ -46,7 +46,7 @@ def public_files():
             paths.add(ROOT / pattern)
     return sorted(p for p in paths if p.is_file() and not any(v in p.parts for v in
         ['__pycache__', '.pytest_cache', '.git', 'node_modules']) and p.suffix not in {'.pyc', '.pyo'}
-        and p.name != 'canvas-home.json' and not p.relative_to(ROOT).as_posix().startswith('docs/v0.16.0/'))
+        and p.name not in {'canvas-home.json', '.gitignore'} and not p.relative_to(ROOT).as_posix().startswith('docs/v0.16.0/'))
 
 
 def validate_public_tree(directory):

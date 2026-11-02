@@ -26,13 +26,14 @@ import re
 import uuid
 import copy
 import importlib.util
+from pathlib import Path
 from urllib.parse import parse_qs, urlsplit, urlencode, quote
 from datetime import datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 BASE = os.environ.get("CANVAS_HOME") or os.path.dirname(os.path.abspath(__file__))
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
-API_VERSION = "0.17.0-rc.1"
+API_VERSION = "0.17.0-rc.2"
 API_PORT = int(os.environ.get("CANVAS_PORT") or 8793)
 API_TOKEN = os.environ.get('CANVAS_API_TOKEN') or secrets.token_urlsafe(32)
 BUILD_FILE = os.path.join(os.path.dirname(APP_DIR), 'build-info.json')
@@ -2470,6 +2471,13 @@ def main():
     except OSError as exc:
         raise SystemExit("API 端口 %d 已被占用（或权限不足）：%s" % (API_PORT, exc))
     API_PORT = server.server_address[1]
+    if not os.path.isfile(workflows_index()) and os.path.isfile(os.path.join(BASE, 'kb', 'canvas-workflow.json')):
+        ensure_workflows()
+    package_root = Path(APP_DIR).parent
+    seed_spec = importlib.util.spec_from_file_location('canvas_builtin_seed', package_root / 'scripts/seed.py')
+    seed_module = importlib.util.module_from_spec(seed_spec)
+    seed_spec.loader.exec_module(seed_module)
+    seed_module.install(Path(BASE), package_root / 'seed')
     ensure_workflows()
     sync_active_workflow_from_mirror()
     port = API_PORT

@@ -2091,7 +2091,7 @@ window.__ModuleLoader__.load({
           ToolButton('关闭', function () { setWorkflowProposal(null); })) : null,
         h("style", null, "@keyframes wcPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,176,32,0)}50%{box-shadow:0 0 0 6px rgba(255,176,32,.14)}}@keyframes wcSpin{to{transform:rotate(360deg)}}@keyframes wcFlow{to{stroke-dashoffset:-28}}@media(prefers-reduced-motion:reduce){[data-flow-active], [data-live-node]{animation:none!important}}"),
         h("div", { style: { display: "flex", alignItems: "center", gap: 7, padding: "9px 13px", borderBottom: "1px solid " + C.borderSoft, background: C.panel, flexWrap: "wrap" } },
-          h("div", { style: { fontSize: 14.5, fontWeight: 800, marginRight: 4 } }, "创作画布 v0.17.0 RC1"),
+          h("div", { style: { fontSize: 14.5, fontWeight: 800, marginRight: 4 } }, "创作画布 v0.17.0 RC2"),
           h("span", { style: { width: 7, height: 7, borderRadius: 99, background: dirty ? C.accent : C.teal, marginRight: 8 } }),
           ToolButton("项目", openProjects, !!project),
           ToolButton(presentation ? '退出全屏' : '全屏工作台', togglePresentation),
