@@ -91,7 +91,7 @@ const denyDownload = () => {throw new Error('Browser download is disabled; confi
     browserExecutable:cfg.browser,chromeMode:'chrome-for-testing',onBrowserDownload:denyDownload,overwrite:false,
     concurrency:1,logLevel:'error'});
   process.stdout.write(JSON.stringify({ok:true,output:cfg.output,composition:cfg.composition}));
-})().catch(error => {process.stderr.write(String(error.message||error));process.exitCode=1;});
+})().catch(error => {process.stderr.write(String(error.message||error), () => process.exit(1));});
 """
 
 
