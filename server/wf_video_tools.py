@@ -86,9 +86,9 @@ const denyDownload = () => {throw new Error('Browser download is disabled; confi
         alias:{...(c.resolve && c.resolve.alias || {}),react:path.join(cfg.nodeModules,'react'),'react-dom':path.join(cfg.nodeModules,'react-dom'),remotion:path.join(cfg.nodeModules,'remotion')}}})});
   const inputProps = {};
   const composition = await selectComposition({serveUrl,id:cfg.composition,inputProps,
-    browserExecutable:cfg.browser,onBrowserDownload:denyDownload});
+    browserExecutable:cfg.browser,chromeMode:'chrome-for-testing',onBrowserDownload:denyDownload});
   await renderMedia({composition,serveUrl,codec:'h264',outputLocation:cfg.output,inputProps,
-    browserExecutable:cfg.browser,onBrowserDownload:denyDownload,overwrite:false,
+    browserExecutable:cfg.browser,chromeMode:'chrome-for-testing',onBrowserDownload:denyDownload,overwrite:false,
     concurrency:1,logLevel:'error'});
   process.stdout.write(JSON.stringify({ok:true,output:cfg.output,composition:cfg.composition}));
 })().catch(error => {process.stderr.write(String(error.message||error));process.exitCode=1;});
@@ -151,13 +151,16 @@ def _project_tree(project):
 
 
 def _environment(scratch=None):
-    allowed = {"SYSTEMROOT", "WINDIR", "COMSPEC", "SYSTEMDRIVE", "PATHEXT"}
+    # Chrome needs the real Windows profile locations to distinguish its default
+    # data directory from Remotion's new, separate --user-data-dir. Spoofing all
+    # profile variables makes current Chrome reject the debugging connection.
+    allowed = {"SYSTEMROOT", "WINDIR", "COMSPEC", "SYSTEMDRIVE", "PATHEXT",
+               "USERPROFILE", "APPDATA", "LOCALAPPDATA", "HOME", "HOMEDRIVE", "HOMEPATH"}
     env = {key: value for key, value in os.environ.items() if key.upper() in allowed}
     env["PATH"] = str(NODE.parent) + os.pathsep + str(Path(os.environ.get("SYSTEMROOT", r"C:\Windows")) / "System32")
     env["NODE_PATH"] = str(NODE_MODULES)
     if scratch is not None:
-        for name, suffix in {"TEMP": "tmp", "TMP": "tmp", "HOME": "profile", "USERPROFILE": "profile",
-                             "APPDATA": "profile/AppData/Roaming", "LOCALAPPDATA": "profile/AppData/Local"}.items():
+        for name, suffix in {"TEMP": "tmp", "TMP": "tmp"}.items():
             directory = scratch / suffix
             directory.mkdir(parents=True, exist_ok=True)
             env[name] = str(directory)

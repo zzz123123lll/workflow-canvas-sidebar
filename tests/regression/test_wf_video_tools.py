@@ -121,6 +121,18 @@ def test_doctor_only_resolves_packages_without_creating_workspace(tool, monkeypa
     assert not (workspace / "scratch").exists()
 
 
+def test_chrome_can_resolve_windows_profile_locations_without_inheriting_secrets(tool, monkeypatch):
+    module,workspace,_,_=tool
+    monkeypatch.setenv('USERPROFILE','C:/Users/renderer-test')
+    monkeypatch.setenv('LOCALAPPDATA','C:/Users/renderer-test/AppData/Local')
+    monkeypatch.setenv('DEEPSEEK_API_KEY','TEST_DO_NOT_INHERIT')
+    environment=module._environment(workspace/'scratch')
+    assert environment['USERPROFILE']=='C:/Users/renderer-test'
+    assert environment['LOCALAPPDATA']=='C:/Users/renderer-test/AppData/Local'
+    assert Path(environment['TEMP']).is_relative_to(workspace)
+    assert 'DEEPSEEK_API_KEY' not in environment
+
+
 def test_nonzero_runtime_exit_does_not_claim_success(tool, monkeypatch):
     module, workspace, _, calls = tool
     original = module.subprocess.run
