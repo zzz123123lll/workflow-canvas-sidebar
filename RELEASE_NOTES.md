@@ -1,14 +1,15 @@
-# v0.17.0 RC2
+# v0.17.0 RC3
 
-面向插件市场安装的候选版。保留 RC1 的工作流功能，补齐完整 npm 分发渠道。
+修复 RC2 超出市场解压体积上限的问题，保留现有工作流功能。
 
-- npm 包 `dsh-workflow-canvas-sidebar` 包含 Windows x64 Python 和哈希锁定依赖；从 Harness 添加包后重启即可使用，无需另跑 `install.cmd`。
-- 完整 ZIP 与 npm `.tgz` 使用同一次构建的文件；提供源码提交、build 和资产哈希记录。
-- 声明仓库、许可、平台和插件入口，补充中英文市场安装说明与收录申请材料。
-- 修正 Windows 长、短路径别名导致的渲染测试断言差异。
+- 移除独立 Harness SDK 的大型可执行文件及传递依赖；正常 AI 步骤继续通过已安装 Harness 的宿主子会话和账号执行。
+- 内置 CPython 3.12.10 和 pypdf 6.14.2；资料/文章/文件任务无需全局 Python 或 Node。
+- 无宿主连接时提示打开或重启 Harness，保留原会话与文件，不要求另配 API key。
+- ZIP 与 npm TGZ 使用相同文件；打包时验证解压总字节不超过 256 MiB，并写入 npm-manifest.json。
+- 不通过安装钩子或首次启动下载、解压被移除的独立运行时。视频仍需使用者配置 Node、Chrome、FFmpeg、Remotion。
 
-候选包拟通过 npm `next` 标签发布，申请市场收录时明确固定 `0.17.0-rc.2`。当前发布、测试和收录状态见 [插件市场说明](docs/插件市场.md)，不把准备完成视为已经上架。
+安装候选版：`dsh plugin --profile desktop add dsh-workflow-canvas-sidebar@0.17.0-rc.3`，完成后重启 Harness。
 
-受测宿主基线为 Windows 11 x64 / DeepSeek Harness 0.2.1-rc.5。文章与文件任务使用自带 Python；模型仍使用用户自己的 Harness 账号，视频另需本地配置 Node、Chrome、FFmpeg 和 Remotion。资料按用户操作交给所配置的模型或工具；本地诊断不会自动上传。
+受测宿主基线 Windows 11 x64 / DeepSeek Harness 0.2.1-rc.5。构建、测试及发布证据随本次发行提供。RC2 的既有真实文章交付与视频示例保留作功能证据；新版验证范围以本次记录为准，不声称有外部真人试用。
 
-RC1 的安装、真实文章交付、模块复用、项目分享、30 秒程序动画和数据保留记录继续保留；RC2 的新增分发验证单独记录。未进行外部真人试用，不设置付费招募或人数门槛。兼容范围见 [兼容与限制](docs/兼容矩阵.md)。
+市场[原申请 #201](https://github.com/polang233/dsh-plugin-index/issues/201)因 RC2 体积未收录，尚未完成代码复核；RC3 作为精简新版继续申请，不代表已获收录。

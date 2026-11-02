@@ -18,112 +18,6 @@
   },
   "wheels": [
     {
-      "name": "annotated-types",
-      "version": "0.8.0",
-      "filename": "annotated_types-0.8.0-py3-none-any.whl",
-      "url": "https://files.pythonhosted.org/packages/99/91/8acff4f5e50511b911bbccb72b8628a49c68ce14148cd9f6431094859a90/annotated_types-0.8.0-py3-none-any.whl",
-      "sha256": "f072f4d804ea359e4eaf198b1af7a8b0943881a87f31bb764f8bf219bb9419e0",
-      "license": "MIT",
-      "requires_dist": [],
-      "licenses": [
-        {
-          "path": "annotated_types-0.8.0.dist-info/licenses/LICENSE",
-          "sha256": "fe1049884b1a0d9342901e88e07f32925d24b3121d9972b6a6805fb9824b095d"
-        }
-      ],
-      "source": "https://pypi.org/project/annotated-types/0.8.0/",
-      "modified": false,
-      "distribution": "windows-runtime"
-    },
-    {
-      "name": "deepseek-harness-runtime-bin",
-      "version": "0.2.1rc2",
-      "filename": "deepseek_harness_runtime_bin-0.2.1rc2-py3-none-win_amd64.whl",
-      "url": "https://files.pythonhosted.org/packages/bc/95/8164c49a5d3430add58db8aeba6546cd05c9ab7ddd2ea3e1acf174448d86/deepseek_harness_runtime_bin-0.2.1rc2-py3-none-win_amd64.whl",
-      "sha256": "d38c18f5117859feedaaa791a0eea37b8644bc187118e7e6f3afa231a5381cb7",
-      "license": "MIT",
-      "requires_dist": [],
-      "licenses": [
-        {
-          "path": "deepseek_harness_runtime_bin-0.2.1rc2.dist-info/licenses/LICENSE",
-          "sha256": "ebb4f09972aee8608be255debaf78451a68e95c290f55c240dec2ecfa16ea6be"
-        },
-        {
-          "path": "deepseek_harness_runtime_bin-0.2.1rc2.dist-info/licenses/THIRD_PARTY_NOTICES.md",
-          "sha256": "aeea7aa256ede5349cc7903f56a859d54f10b82a45fba7dcce667eb69916dab0"
-        }
-      ],
-      "source": "https://pypi.org/project/deepseek-harness-runtime-bin/0.2.1rc2/",
-      "modified": false,
-      "distribution": "windows-runtime"
-    },
-    {
-      "name": "deepseek-harness-sdk",
-      "version": "0.2.1rc2",
-      "filename": "deepseek_harness_sdk-0.2.1rc2-py3-none-any.whl",
-      "url": "https://files.pythonhosted.org/packages/d4/da/97d6b092e5221e13c8560d50d1e5f5c9eb8ad64a75f40196bf340572dd15/deepseek_harness_sdk-0.2.1rc2-py3-none-any.whl",
-      "sha256": "30fc72c67f20ff4b46c6952087ea596fc70c2692001aa372185a24f9866bdc46",
-      "license": "MIT",
-      "requires_dist": [
-        "deepseek-harness-runtime-bin==0.2.1rc2",
-        "pydantic<3,>=2.12"
-      ],
-      "licenses": [
-        {
-          "path": "deepseek_harness_sdk-0.2.1rc2.dist-info/licenses/LICENSE",
-          "sha256": "ebb4f09972aee8608be255debaf78451a68e95c290f55c240dec2ecfa16ea6be"
-        }
-      ],
-      "source": "https://pypi.org/project/deepseek-harness-sdk/0.2.1rc2/",
-      "modified": false,
-      "distribution": "windows-runtime"
-    },
-    {
-      "name": "pydantic",
-      "version": "2.14.2",
-      "filename": "pydantic-2.14.2-py3-none-any.whl",
-      "url": "https://files.pythonhosted.org/packages/97/01/c71a71258b58659c72504e5fd65b451f6e36e34dc931d0b237ded213c814/pydantic-2.14.2-py3-none-any.whl",
-      "sha256": "7efbf7507b937931cd32a5755acb00ea1cf5ccb1d4e8067a5850d5069e382118",
-      "license": "MIT",
-      "requires_dist": [
-        "annotated-types>=0.6.0",
-        "pydantic-core==2.50.2",
-        "typing-extensions>=4.16.0",
-        "typing-inspection>=0.4.4",
-        "email-validator>=2.0.0; extra == 'email'",
-        "tzdata; (platform_system == 'Windows') and extra == 'timezone'"
-      ],
-      "licenses": [
-        {
-          "path": "pydantic-2.14.2.dist-info/licenses/LICENSE",
-          "sha256": "a9e186f3ca16b5eef84318e7a701721351a00cb7b8ae3a4394b67b49e3529ef3"
-        }
-      ],
-      "source": "https://pypi.org/project/pydantic/2.14.2/",
-      "modified": false,
-      "distribution": "windows-runtime"
-    },
-    {
-      "name": "pydantic_core",
-      "version": "2.50.2",
-      "filename": "pydantic_core-2.50.2-cp312-cp312-win_amd64.whl",
-      "url": "https://files.pythonhosted.org/packages/b4/fb/679144362d7e5162519d9f6631ec982521417de3196351c6c56485f5b29f/pydantic_core-2.50.2-cp312-cp312-win_amd64.whl",
-      "sha256": "b381574614245f18fdb2d6d1aa8f149e225869c47b5ee7f81812de8977817314",
-      "license": "MIT",
-      "requires_dist": [
-        "typing-extensions>=4.16.0"
-      ],
-      "licenses": [
-        {
-          "path": "pydantic_core-2.50.2.dist-info/licenses/LICENSE",
-          "sha256": "fbe7f615f18d135c07000e5a86325db27f42c7729699ef166ac1f7a3f4586bf4"
-        }
-      ],
-      "source": "https://pypi.org/project/pydantic_core/2.50.2/",
-      "modified": false,
-      "distribution": "windows-runtime"
-    },
-    {
       "name": "pypdf",
       "version": "6.14.2",
       "filename": "pypdf-6.14.2-py3-none-any.whl",
@@ -160,44 +54,6 @@
       "source": "https://pypi.org/project/pypdf/6.14.2/",
       "modified": false,
       "distribution": "windows-runtime"
-    },
-    {
-      "name": "typing_extensions",
-      "version": "4.16.0",
-      "filename": "typing_extensions-4.16.0-py3-none-any.whl",
-      "url": "https://files.pythonhosted.org/packages/49/d3/b8441a820a491ddfc024b0b0cf0393375b75ea13866d9c66727e54c2fc80/typing_extensions-4.16.0-py3-none-any.whl",
-      "sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8",
-      "license": "PSF-2.0",
-      "requires_dist": [],
-      "licenses": [
-        {
-          "path": "typing_extensions-4.16.0.dist-info/licenses/LICENSE",
-          "sha256": "3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf"
-        }
-      ],
-      "source": "https://pypi.org/project/typing_extensions/4.16.0/",
-      "modified": false,
-      "distribution": "windows-runtime"
-    },
-    {
-      "name": "typing-inspection",
-      "version": "0.4.4",
-      "filename": "typing_inspection-0.4.4-py3-none-any.whl",
-      "url": "https://files.pythonhosted.org/packages/67/81/4add07e5172b7ac40d8ed5ff580409a7801a4fe26d529bdd915401dabfbe/typing_inspection-0.4.4-py3-none-any.whl",
-      "sha256": "65b8397ba37ccbce054456aaccddfc91e6e3083c92824df348d96ca832f3f147",
-      "license": "MIT",
-      "requires_dist": [
-        "typing-extensions>=4.15.0"
-      ],
-      "licenses": [
-        {
-          "path": "typing_inspection-0.4.4.dist-info/licenses/LICENSE",
-          "sha256": "804b59b25f2c31bd278f9202a19ae49a3945aa2664387e2d0a128c7cacc61ec3"
-        }
-      ],
-      "source": "https://pypi.org/project/typing-inspection/0.4.4/",
-      "modified": false,
-      "distribution": "windows-runtime"
     }
   ],
   "optional_video": {
@@ -231,5 +87,7 @@
         }
       ]
     }
-  ]
+  ],
+  "agent_backend": "host-subagent",
+  "standalone_sdk_distributed": false
 }

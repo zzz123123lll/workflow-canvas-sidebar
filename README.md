@@ -4,7 +4,7 @@
 
 这是 DeepSeek Harness 的可视化项目工作台。适合研究写作、资料整理和配置后的短视频制作。项目保存目标、资料、流程、会话和成果版本；画布负责分工，模块工作区负责协作，成果页负责阅读、审阅与下载。
 
-**当前源码：v0.17.0 RC2，市场安装候选版。** RC1 已公开发布，RC2 的 npm 发布与市场收录状态见[插件市场说明](docs/插件市场.md)。欢迎直接试用并反馈，不收取插件费用；模型服务和可选视频工具按各自条件使用。
+**当前源码：v0.17.0 RC3，精简市场候选版。** RC2 因解压体积超过市场 256 MiB 上限未获收录；RC3 去掉冗余独立 Harness 运行时，改用宿主现有子会话。发布与收录状态见[插件市场说明](docs/插件市场.md)。欢迎直接试用并反馈，不收取插件费用；模型服务和可选视频工具按各自条件使用。
 
 [English](README.en.md) · [安装与快速开始](docs/安装与快速开始.md) · [插件市场](docs/插件市场.md) · [视频配置](docs/视频配置.md) · [升级与恢复](docs/升级与恢复.md) · [兼容与限制](docs/兼容矩阵.md)
 
@@ -21,13 +21,13 @@
 
 受测平台为 Windows 11 x64，宿主基线 DeepSeek Harness 0.2.1-rc.5。请先安装并启动 Harness 一次。
 
-**市场渠道**：在 Harness「插件 → 添加插件」填写 `dsh-workflow-canvas-sidebar@0.17.0-rc.2`，或运行：
+**市场渠道**：在 Harness「插件 → 添加插件」填写 `dsh-workflow-canvas-sidebar@0.17.0-rc.3`，或运行：
 
 ```powershell
-dsh plugin --profile desktop add dsh-workflow-canvas-sidebar@0.17.0-rc.2
+dsh plugin --profile desktop add dsh-workflow-canvas-sidebar@0.17.0-rc.3
 ```
 
-重启 Harness 后打开“画布”。市场包包含 Python 和锁定依赖，无需额外运行 `install.cmd`，也没有安装时自动执行的 `install` / `postinstall` 脚本。RC2 使用 npm 的 `next` 候选标签，请明确指定版本；现在可直接按包名安装，市场收录进度见[申请 #201](https://github.com/polang233/dsh-plugin-index/issues/201)。
+重启 Harness 后打开“画布”。市场包包含 Python 和 PDF 锁定依赖；AI 由 Harness 宿主执行，无需额外运行 `install.cmd`，也没有安装时自动执行的 `install` / `postinstall` 脚本。RC3 使用 npm 的 `next` 候选标签，请明确指定版本；现在可直接按包名安装，市场收录进度见[申请 #201](https://github.com/polang233/dsh-plugin-index/issues/201)。
 
 **ZIP 渠道**：先安装免费的 PowerShell 7，然后：
 

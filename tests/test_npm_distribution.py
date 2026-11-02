@@ -11,6 +11,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
 from npm_package import pack_release
+import npm_package
 import build
 
 
@@ -58,6 +59,15 @@ def test_npm_pack_contains_every_built_file_and_records_integrity(release):
                   for item in tar.getmembers() if item.isfile()}
     assert packed == entries
     assert manifest['build']['build_id'] == 'fixture-build'
+    assert manifest['unpacked_bytes'] == sum(map(len, entries.values()))
+
+
+def test_market_size_limit_checks_unpacked_payload_not_gzip_size(release, monkeypatch):
+    directory, write = release
+    write(lambda entries: entries.update({'server/large.txt': b'a' * 2048}))
+    monkeypatch.setattr(npm_package, 'MAX_UNPACKED_BYTES', 2048)
+    with pytest.raises(ValueError, match='解压体积'):
+        pack_release(directory)
 
 
 def test_corrupted_release_is_rejected_before_packing(release):

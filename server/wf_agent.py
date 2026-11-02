@@ -4,8 +4,8 @@
 
 Knowledge is supplied only from the selected task partition. The dedicated
 workspace is an execution boundary for staging and promotion, not an OS sandbox.
-The normal interpreter needs only the standard library; the worker uses the
-separate .agent-venv with deepseek-harness-sdk==0.2.1rc2.
+The distributed plugin uses the host's subagent bridge. The legacy standalone
+SDK worker remains available to source developers, outside the market package.
 """
 import argparse
 import base64
@@ -200,9 +200,22 @@ Set-Acl -LiteralPath $target -AclObject $acl
         raise RuntimeError('Cannot prepare node workspace owner access: ' + redact(exc.stderr or exc.stdout)[-1500:]) from exc
 
 
+def host_only_distribution():
+    """The built plugin declares its host backend in the shipped dependency manifest."""
+    try:
+        manifest = Path(__file__).resolve().parent.parent / 'dependencies.json'
+        return json.loads(manifest.read_text(encoding='utf-8'))['agent_backend'] == 'host-subagent'
+    except (OSError, ValueError, KeyError, TypeError):
+        return False
+
+
 def runtime_status():
+    host = host_agent_config()
+    if host or host_only_distribution():
+        connected = bool(host and not host.get('disconnected'))
+        return {'installed': connected, 'configured': connected, 'backend': 'host-subagent'}
     python = _runtime_python()
-    root = python.parent.parent
+    root = python.parent if python.parent.name.lower() not in {'scripts', 'bin'} else python.parent.parent
     packages = root / ("Lib/site-packages" if os.name == "nt" else "lib")
     installed = python.is_file() and (packages / "deepseek_harness").is_dir()
     if os.name != "nt" and python.is_file():
@@ -882,6 +895,11 @@ def run_agent(task, *, workspace, runtime_home, session_id, timeout_seconds=180,
                     pass
                 return _result("failed", "宿主子会话执行失败：" + message, task, session_id, evidence=evidence,
                                question="宿主子会话执行失败：" + message)
+        if host_only_distribution():
+            terminal_phase = 'waiting_input'
+            return _result('needs_input', '尚未连接 Harness 宿主，原会话和文件已保留', task, session_id,
+                           question='请从 Harness 打开画布或重启 Harness 后继续当前节点，无需另配 API 密钥。',
+                           evidence={'backend': 'host-subagent', 'disconnected': True})
         key = resolve_api_key()
         if not key:
             terminal_phase = "waiting_input"

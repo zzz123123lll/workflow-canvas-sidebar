@@ -13,6 +13,8 @@ import tempfile
 from build import validate_public_tree, write_json
 from runtime import extract
 
+MAX_UNPACKED_BYTES = 256 * 1024 * 1024
+
 
 def digest(path, algorithm='sha256'):
     with path.open('rb') as stream:
@@ -53,6 +55,9 @@ def pack_release(release_dir):
                 raise ValueError('发行文件SHA-256不匹配: ' + entry['path'])
         expected = {p.relative_to(staging).as_posix(): digest(p).hex()
                     for p in staging.rglob('*') if p.is_file()}
+        unpacked_bytes = sum((staging / name).stat().st_size for name in expected)
+        if unpacked_bytes > MAX_UNPACKED_BYTES:
+            raise ValueError(f'市场包解压体积 {unpacked_bytes} 字节超过上限 {MAX_UNPACKED_BYTES} 字节')
         result = subprocess.run([npm, 'pack', '--ignore-scripts', '--json',
                                  '--pack-destination', str(release_dir)], cwd=staging,
                                 capture_output=True, text=True, encoding='utf-8', check=True)
@@ -69,7 +74,8 @@ def pack_release(release_dir):
                     'filename': filename, 'build': release['build'],
                     'sha256': digest(packed).hex(), 'bytes': packed.stat().st_size,
                     'integrity': 'sha512-' + base64.b64encode(digest(packed, 'sha512')).decode('ascii'),
-                    'files': len(actual), 'install_scripts_required': False}
+                    'files': len(actual), 'unpacked_bytes': unpacked_bytes,
+                    'max_unpacked_bytes': MAX_UNPACKED_BYTES, 'install_scripts_required': False}
         write_json(release_dir / 'npm-manifest.json', manifest)
         sums = [digest(p).hex() + '  ' + p.name for p in sorted(release_dir.iterdir())
                 if p.is_file() and p.name != 'SHA256SUMS.txt']

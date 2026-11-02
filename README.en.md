@@ -2,7 +2,7 @@
 
 A visual AI project workbench for DeepSeek Harness. Define a goal, connect AI steps, keep discussing and revising, and deliver versioned files.
 
-**Source version: v0.17.0 RC2 — marketplace installation candidate.** RC1 is publicly released; see [marketplace status and submission notes](docs/插件市场.md) for RC2 npm publication and listing status. The plugin is free; model accounts and optional video tools retain their own terms.
+**Source version: v0.17.0 RC3 — slim marketplace candidate.** RC2 exceeded the marketplace unpacked-size limit. RC3 uses the host subagent service instead of bundling a second Harness runtime; see [marketplace status and submission notes](docs/插件市场.md) for RC3 npm publication and listing status. The plugin is free; model accounts and optional video tools retain their own terms.
 
 Built-in starters: sources to article, a configurable 30-second motion-graphics workflow, and a general Markdown/JSON file task. Projects keep their own goals, inputs, module conversations and results. Revisions preserve old files and invalidate only dependent steps. Current work and the selected delivery run are separate.
 
@@ -10,13 +10,13 @@ Built-in starters: sources to article, a configurable 30-second motion-graphics 
 
 The tested baseline is Windows 11 x64 with DeepSeek Harness 0.2.1-rc.5. Install and open Harness once.
 
-**Marketplace package:** add `dsh-workflow-canvas-sidebar@0.17.0-rc.2` in Harness → Plugins → Add Plugin, or run:
+**Marketplace package:** add `dsh-workflow-canvas-sidebar@0.17.0-rc.3` in Harness → Plugins → Add Plugin, or run:
 
 ```powershell
-dsh plugin --profile desktop add dsh-workflow-canvas-sidebar@0.17.0-rc.2
+dsh plugin --profile desktop add dsh-workflow-canvas-sidebar@0.17.0-rc.3
 ```
 
-Restart Harness and open Canvas. The package includes Python and locked dependencies; it needs neither `install.cmd` nor an automatic `install` / `postinstall` script. RC2 uses the npm `next` tag, so select the explicit candidate version. While the marketplace listing is pending, the published ZIP remains available.
+Restart Harness and open Canvas. The package includes Python and locked dependencies; it needs neither `install.cmd` nor an automatic `install` / `postinstall` script. RC3 uses the npm `next` tag, so select the explicit candidate version. While the marketplace listing is pending, the published ZIP remains available.
 
 **ZIP installation:** install free PowerShell 7, download the complete Windows ZIP from Releases, verify SHA256SUMS, extract it to a stable directory, and run `install.cmd`. Restart Harness and open Canvas. The displayed version should match your downloaded package.
 

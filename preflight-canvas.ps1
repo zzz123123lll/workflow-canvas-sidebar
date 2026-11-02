@@ -35,19 +35,7 @@ if (Test-Path $py) {
   $pdf = (& $py -c "from pypdf import PdfReader; import pypdf; print(pypdf.__version__)" 2>&1 | Out-String).Trim()
   Add-Row "PDF text extraction" ($pdf -eq "6.14.2") $pdf
 }
-$agentPy = ""
-if (Test-Path -LiteralPath $py) {
-  $previousCanvasHome = $env:CANVAS_HOME
-  try {
-    $env:CANVAS_HOME = $CanvasHome
-    $agentPy = (& $py -c "import sys; sys.path.insert(0, sys.argv[1]); import wf_agent; print(wf_agent._runtime_python())" (Join-Path $Plugin "server") 2>$null | Out-String).Trim()
-  } finally { $env:CANVAS_HOME = $previousCanvasHome }
-}
-Add-Row "agent runtime python" (Test-Path $agentPy) $agentPy
-if (Test-Path $agentPy) {
-  $sdk = (& $agentPy -c "from deepseek_harness import DeepSeekHarness; print('ok')" 2>&1 | Out-String).Trim()
-  Add-Row "deepseek sdk" ($sdk -eq "ok") $sdk
-}
+Add-Row "AI backend" $true "使用 Harness 宿主账号与子会话；无需独立 SDK 或另一份 Harness 运行时。"
 
 $server = Join-Path $Plugin "server\canvas_editor_server.py"
 Add-Row "server code" (Test-Path $server) $server

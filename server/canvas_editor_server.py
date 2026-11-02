@@ -33,7 +33,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 BASE = os.environ.get("CANVAS_HOME") or os.path.dirname(os.path.abspath(__file__))
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
-API_VERSION = "0.17.0-rc.2"
+API_VERSION = "0.17.0-rc.3"
 API_PORT = int(os.environ.get("CANVAS_PORT") or 8793)
 API_TOKEN = os.environ.get('CANVAS_API_TOKEN') or secrets.token_urlsafe(32)
 BUILD_FILE = os.path.join(os.path.dirname(APP_DIR), 'build-info.json')

@@ -87,7 +87,7 @@ if (-not $NoVenv -and -not $UseBundled -and -not $keepExistingPython) {
   }
   $Python = Join-Path $Venv 'Scripts\python.exe'
 }
-$dependencyCheck = & $Python -c "import importlib.metadata as m; assert m.version('deepseek-harness-sdk') == '0.2.1rc2'; assert m.version('pypdf') == '6.14.2'; from deepseek_harness import DeepSeekHarness; from pypdf import PdfReader; print('ready')" 2>$null
+$dependencyCheck = & $Python -c "import importlib.metadata as m; assert m.version('pypdf') == '6.14.2'; from pypdf import PdfReader; print('ready')" 2>$null
 $dependenciesReady = $LASTEXITCODE -eq 0 -and $dependencyCheck -eq 'ready'
 if ($dependenciesReady) { Write-Host 'Dependencies already present. No network or pip installation needed.' }
 elseif (-not $RepairDependencies) {
