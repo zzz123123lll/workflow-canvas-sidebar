@@ -4,9 +4,19 @@
 
 这是 DeepSeek Harness 的可视化项目工作台。适合研究写作、资料整理和配置后的短视频制作。项目保存目标、资料、流程、会话和成果版本；画布负责分工，模块工作区负责协作，成果页负责阅读、审阅与下载。
 
-**当前源码：v0.17.0 RC3，精简市场候选版。** RC2 因解压体积超过市场 256 MiB 上限未获收录；RC3 去掉冗余独立 Harness 运行时，改用宿主现有子会话。发布与收录状态见[插件市场说明](docs/插件市场.md)。欢迎直接试用并反馈，不收取插件费用；模型服务和可选视频工具按各自条件使用。
+**当前公开版：v0.17.0 RC3。** 已在 npm 和 GitHub 发布，可直接安装；[插件市场收录申请](https://github.com/polang233/dsh-plugin-index/issues/201)等待代码复核。MIT 开源，插件免费；模型服务和可选视频工具按各自条件使用。
 
 [English](README.en.md) · [安装与快速开始](docs/安装与快速开始.md) · [插件市场](docs/插件市场.md) · [视频配置](docs/视频配置.md) · [升级与恢复](docs/升级与恢复.md) · [兼容与限制](docs/兼容矩阵.md)
+
+## 先看一个完整例子
+
+**六份资料 → 志愿者执行说明 → 正文、来源与清单 → 下载交付 ZIP。**
+
+资料中有 78 把椅子，但不等于能报名 78 人。负责人确认上限 70 名后，后续步骤按这个决定继续整理。案例使用原创合成资料，便于核对流程与成果。
+
+![工作流画布项目总览与模板（RC1 真实界面示例）](https://github.com/zzz123123lll/workflow-canvas-sidebar/releases/download/v0.17.0-rc.1/workbench.png)
+
+[下载完整示例](https://github.com/zzz123123lll/workflow-canvas-sidebar/releases/download/v0.17.0-rc.1/examples.zip)：解压后，`examples/portable-project.json` 包含项目定义和资料，`examples/article-delivery.zip` 包含文章、来源与清单。示例来自 RC1 的既有功能演示；安装使用当前 RC3。
 
 ## 你可以做什么
 
