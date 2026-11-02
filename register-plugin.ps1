@@ -16,14 +16,14 @@ if (Test-Path -LiteralPath $linkPath) {
     throw "已有同名插件指向其他目录。请把升级文件覆盖到现有插件目录；未替换链接或其他插件：$linkPath"
   }
 }
-$profile = Get-Content -LiteralPath $packagePath -Raw | ConvertFrom-Json -AsHashtable
-if (-not $profile.dependencies) { $profile.dependencies = @{} }
-if (-not $profile.dsh) { $profile.dsh = @{} }
-if (-not $profile.dsh.profile) { $profile.dsh.profile = @{} }
-$profile.dependencies['dsh-workflow-canvas-sidebar'] = 'link:' + $pluginRoot.Replace('\', '/')
-$bundles = @($profile.dsh.profile.bundles | Where-Object { $_ })
+$profileManifest = Get-Content -LiteralPath $packagePath -Raw | ConvertFrom-Json -AsHashtable
+if (-not $profileManifest.dependencies) { $profileManifest.dependencies = @{} }
+if (-not $profileManifest.dsh) { $profileManifest.dsh = @{} }
+if (-not $profileManifest.dsh.profile) { $profileManifest.dsh.profile = @{} }
+$profileManifest.dependencies['dsh-workflow-canvas-sidebar'] = 'link:' + $pluginRoot.Replace('\', '/')
+$bundles = @($profileManifest.dsh.profile.bundles | Where-Object { $_ })
 if ('dsh-workflow-canvas-sidebar' -notin $bundles) { $bundles += 'dsh-workflow-canvas-sidebar' }
-$profile.dsh.profile.bundles = $bundles
+$profileManifest.dsh.profile.bundles = $bundles
 $backupPath = $packagePath + '.canvas-backup-' + (Get-Date -Format 'yyyyMMdd-HHmmss-fff')
 Copy-Item -LiteralPath $packagePath -Destination $backupPath
 if (-not (Test-Path -LiteralPath $linkPath)) {
@@ -31,7 +31,7 @@ if (-not (Test-Path -LiteralPath $linkPath)) {
   New-Item -ItemType Junction -Path $linkPath -Target $pluginRoot | Out-Null
 }
 $temporaryPath = $packagePath + '.canvas-tmp'
-[System.IO.File]::WriteAllText($temporaryPath, ($profile | ConvertTo-Json -Depth 30), [System.Text.UTF8Encoding]::new($false))
+[System.IO.File]::WriteAllText($temporaryPath, ($profileManifest | ConvertTo-Json -Depth 30), [System.Text.UTF8Encoding]::new($false))
 Move-Item -LiteralPath $temporaryPath -Destination $packagePath -Force
 Write-Host "Registered workflow canvas $($manifest.version). Other bundles and dependencies preserved."
 Write-Host "Profile backup: $backupPath"

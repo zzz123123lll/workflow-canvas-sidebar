@@ -40,8 +40,8 @@ if ($DeleteData -and (Test-Path -LiteralPath $dataRoot)) {
 }
 $profileRoot = [IO.Path]::GetFullPath($ProfilePath)
 $packagePath = Join-Path $profileRoot 'package.json'
-$profile = $null
-if (Test-Path -LiteralPath $packagePath) { $profile = Get-Content -LiteralPath $packagePath -Raw | ConvertFrom-Json -AsHashtable }
+$profileManifest = $null
+if (Test-Path -LiteralPath $packagePath) { $profileManifest = Get-Content -LiteralPath $packagePath -Raw | ConvertFrom-Json -AsHashtable }
 $linkPath = Join-Path $profileRoot 'node_modules\dsh-workflow-canvas-sidebar'
 if (Test-Path -LiteralPath $linkPath) {
   $link = Get-Item -LiteralPath $linkPath -Force
@@ -52,13 +52,13 @@ if (Test-Path -LiteralPath $linkPath) {
 Write-Host "解除插件登记：$pluginRoot"
 Write-Host $(if ($backupPath) { "数据仅移至备份：$backupPath" } else { "保留数据：$dataRoot" })
 if ($ShowPlan) { Write-Host '仅展示计划，未修改。'; exit 0 }
-if ($profile) {
+if ($profileManifest) {
   Copy-Item -LiteralPath $packagePath -Destination ($packagePath + '.canvas-uninstall-backup-' + (Get-Date -Format 'yyyyMMdd-HHmmss-fff'))
-  if ($profile.dependencies) { $profile.dependencies.Remove('dsh-workflow-canvas-sidebar') | Out-Null }
-  if ($profile.dsh -and $profile.dsh.profile) {
-    $profile.dsh.profile.bundles = @($profile.dsh.profile.bundles | Where-Object { $_ -ne 'dsh-workflow-canvas-sidebar' })
+  if ($profileManifest.dependencies) { $profileManifest.dependencies.Remove('dsh-workflow-canvas-sidebar') | Out-Null }
+  if ($profileManifest.dsh -and $profileManifest.dsh.profile) {
+    $profileManifest.dsh.profile.bundles = @($profileManifest.dsh.profile.bundles | Where-Object { $_ -ne 'dsh-workflow-canvas-sidebar' })
   }
-  [IO.File]::WriteAllText($packagePath, ($profile | ConvertTo-Json -Depth 30), [Text.UTF8Encoding]::new($false))
+  [IO.File]::WriteAllText($packagePath, ($profileManifest | ConvertTo-Json -Depth 30), [Text.UTF8Encoding]::new($false))
 }
 if (Test-Path -LiteralPath $linkPath) { Remove-Item -LiteralPath $linkPath -Force }
 if ($backupPath) { Move-Item -LiteralPath $dataRoot -Destination $backupPath }
