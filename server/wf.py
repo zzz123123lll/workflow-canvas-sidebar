@@ -877,6 +877,8 @@ def exec_agent(node, stem, run_id, state):
     tools_snapshot = os.path.join(run_dir(run_id), "execution-tools.json")
     tools_source = os.path.join(BASE, 'kb', 'execution-tools.json') if node.get('capabilities') else tools_snapshot if os.path.isfile(tools_snapshot) else os.path.join(BASE, 'kb', 'execution-tools.json')
     execution_tools = read_json(tools_source, {}) if node.get('skills') or node.get('capabilities') else {}
+    execution_tools = dict(execution_tools, python=execution_tools.get('python') or sys.executable,
+                           python_usage='需要Python时使用此绝对路径，不假设系统PATH存在python。也可用宿主写文件工具保存成果。')
     if node.get('capabilities'):
         import wf_environment
         environment = wf_environment.inspect(BASE)
