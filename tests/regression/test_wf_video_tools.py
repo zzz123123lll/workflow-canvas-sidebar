@@ -87,7 +87,8 @@ def test_render_uses_fixed_runtime_and_scoped_javascript(tool):
     assert Path(options["cwd"]).is_relative_to(workspace)
     browser_temp = Path(options["env"]["TEMP"])
     assert browser_temp.parent.name.startswith('wc-render-')
-    assert browser_temp.parent.parent == Path(module.tempfile.gettempdir())
+    # Windows runners may spell the same directory with an 8.3 profile alias.
+    assert browser_temp.parent.parent.resolve() == Path(module.tempfile.gettempdir()).resolve()
     assert not browser_temp.exists(), 'browser runtime is cleaned after the render'
     assert "DEEPSEEK_API_KEY" not in options["env"]
     assert "ELEVENLABS_API_KEY" not in options["env"]
