@@ -19,6 +19,15 @@ $dataRoot = [IO.Path]::GetFullPath($CanvasHome).TrimEnd('\','/')
 $backupPath = $null
 if ($DeleteData -and (Test-Path -LiteralPath $dataRoot)) {
   $dataItem = Get-Item -LiteralPath $dataRoot -Force
+  $ancestorPath = $dataRoot
+  while ($ancestorPath) {
+    $ancestorItem = Get-Item -LiteralPath $ancestorPath -Force
+    if ($ancestorItem.LinkType -or ($ancestorItem.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+      throw '数据目录的任一级路径不能经过链接；未移动任何内容。'
+    }
+    $ancestorInfo = [IO.Directory]::GetParent($ancestorPath)
+    $ancestorPath = if ($ancestorInfo) { $ancestorInfo.FullName } else { $null }
+  }
   $resolvedRoot = (Resolve-Path -LiteralPath $dataRoot).Path.TrimEnd('\','/')
   $userRoot = [IO.Path]::GetFullPath($env:USERPROFILE).TrimEnd('\','/')
   if ($dataItem.LinkType -or ($dataItem.Attributes -band [IO.FileAttributes]::ReparsePoint) -or

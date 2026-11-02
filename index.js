@@ -413,8 +413,8 @@ async function hostRunAgent(body, signal) {
 async function handler(req, res) {
   if (!acceptOrigin(req, res)) return
   const path = (req.url || '/').split('?')[0]
-  if (path.startsWith('/api/') && path !== '/api/health' && req.headers['x-canvas-token'] !== HOST_TOKEN
-    && req.headers['sec-fetch-site'] !== 'same-origin') return sendJson(res, 403, { ok: false, error: '请通过Harness画布访问' })
+  if (path.startsWith('/api/') && path !== '/api/health' && req.headers['x-canvas-token'] !== HOST_TOKEN)
+    return sendJson(res, 403, { ok: false, error: '请通过Harness画布访问' })
   if (req.method === 'OPTIONS') {
     cors(res)
     res.writeHead(204)
