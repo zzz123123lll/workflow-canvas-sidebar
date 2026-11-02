@@ -8,11 +8,8 @@ def overview(store, project_id, results_for):
     project = store.get(project_id)
     runs = store.runs(project_id)
     business = [r for r in runs if r.get('run_kind') != 'workflow_proposal']
-    current = next((r for r in business if r['run_id'] == project.get('work_run_id')), None)
-    selection = 'explicit'
-    if current is None:
-        current = business[0] if business else None
-        selection = 'legacy-display-default' if current else 'none'
+    current = store.current_run(project_id)
+    selection = 'explicit' if project.get('work_run_id') else 'legacy-display-default' if current else 'none'
     delivery = next((r for r in business if r['run_id'] == project.get('delivery_run_id')), None)
     dispositions = store.dispositions(project_id)
     pending, history = [], []

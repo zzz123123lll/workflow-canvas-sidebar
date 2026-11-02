@@ -49,13 +49,17 @@ class ProjectStore:
                     cursor INTEGER NOT NULL, PRIMARY KEY(run_id,node_id,session_id));
                 CREATE TABLE IF NOT EXISTS project_work(
                     project_id TEXT PRIMARY KEY REFERENCES projects(id),
-                    work_run_id TEXT, delivery_run_id TEXT);
+                    work_run_id TEXT, delivery_run_id TEXT, work_revision INTEGER NOT NULL DEFAULT 0);
                 CREATE TABLE IF NOT EXISTS run_dispositions(
                     run_id TEXT PRIMARY KEY REFERENCES run_projects(run_id),
                     replacement_run_id TEXT REFERENCES run_projects(run_id),
                     reason TEXT NOT NULL, decided_at TEXT NOT NULL);
                 PRAGMA user_version=2;
             ''')
+            if 'work_revision' not in {r['name'] for r in db.execute('PRAGMA table_info(project_work)')}:
+                try:db.execute('ALTER TABLE project_work ADD COLUMN work_revision INTEGER NOT NULL DEFAULT 0')
+                except sqlite3.OperationalError:
+                    if 'work_revision' not in {r['name'] for r in db.execute('PRAGMA table_info(project_work)')}:raise
 
     @contextlib.contextmanager
     def connect(self):
@@ -85,8 +89,8 @@ class ProjectStore:
     def get(self, project_id, db=None):
         if db is not None:
             project = self.unpack(db.execute('SELECT * FROM projects WHERE id=?', (project_id,)).fetchone())
-            work = db.execute('SELECT work_run_id,delivery_run_id FROM project_work WHERE project_id=?', (project_id,)).fetchone()
-            project.update(dict(work) if work else {'work_run_id': None, 'delivery_run_id': None})
+            work = db.execute('SELECT work_run_id,delivery_run_id,work_revision FROM project_work WHERE project_id=?', (project_id,)).fetchone()
+            project.update(dict(work) if work else {'work_run_id': None, 'delivery_run_id': None, 'work_revision': 0})
             return project
         with self.connect() as connection:
             return self.get(project_id, connection)
@@ -125,6 +129,8 @@ class ProjectStore:
                 project = self.get(project_id, db)
                 if body.get('expected_revision') != project['revision']:
                     raise Conflict('项目已更新，请刷新后再操作')
+                if body.get('expected_work_revision') != project['work_revision']:
+                    raise Conflict('当前工作或交付选择已更新，请刷新项目后再操作')
                 run_id = str(body.get('run_id') or '')
                 owned = db.execute('SELECT project_id FROM run_projects WHERE run_id=?', (run_id,)).fetchone()
                 if not owned or owned[0] != project_id:
@@ -150,6 +156,9 @@ class ProjectStore:
                     column = 'work_run_id' if operation == 'set-work-run' else 'delivery_run_id'
                     db.execute('INSERT OR IGNORE INTO project_work(project_id) VALUES(?)', (project_id,))
                     db.execute('UPDATE project_work SET '+column+'=? WHERE project_id=?', (run_id, project_id))
+                    if operation == 'set-work-run':db.execute('DELETE FROM run_dispositions WHERE run_id=?', (run_id,))
+                db.execute('INSERT OR IGNORE INTO project_work(project_id) VALUES(?)', (project_id,))
+                db.execute('UPDATE project_work SET work_revision=work_revision+1 WHERE project_id=?', (project_id,))
                 db.execute('UPDATE projects SET revision=revision+1,updated_at=? WHERE id=?', (stamp(), project_id))
             elif operation in {'update', 'archive'}:
                 project = self.get(project_id, db)
@@ -169,6 +178,8 @@ class ProjectStore:
             else:
                 raise ValueError('未知项目命令')
             result = {'ok': True, 'project': self.get(project_id, db), 'request_id': request_id}
+            if operation in {'set-work-run','set-delivery-run','supersede-run'}:
+                result['decision'] = {key:body[key] for key in ['run_id','replacement_run_id','reason'] if key in body}
             db.execute('INSERT INTO commands VALUES(?,?,?,?,?,?)',
                        (request_id, project_id, operation, fingerprint, json.dumps(result, ensure_ascii=False), stamp()))
             return result
@@ -220,9 +231,29 @@ class ProjectStore:
             from wf_commands import enqueue
             enqueue(self.base, 'run', {key: result[key] for key in ('request_id', 'project_id', 'run_id')}, db=db)
             if purpose != 'workflow_proposal':
-                db.execute('INSERT INTO project_work(project_id,work_run_id) VALUES(?,?) ON CONFLICT(project_id) DO UPDATE SET work_run_id=excluded.work_run_id',
+                db.execute('INSERT INTO project_work(project_id,work_run_id,work_revision) VALUES(?,?,1) ON CONFLICT(project_id) DO UPDATE SET work_run_id=excluded.work_run_id,work_revision=work_revision+1',
                            (project['project_id'], run_id))
+                result['work_revision'] = self.get(project['project_id'], db)['work_revision']
+                db.execute('UPDATE commands SET result=? WHERE request_id=?', (json.dumps(result,ensure_ascii=False),request_id))
             return result, True
+
+    def current_run(self, project_id):
+        project = self.get(project_id)
+        runs = self.runs(project_id)
+        rid = project.get('work_run_id')
+        if not rid:
+            return next((r for r in runs if r.get('run_kind') != 'workflow_proposal'), None)
+        current = next((r for r in runs if r['run_id'] == rid), None)
+        if current:return current
+        with self.connect() as db:
+            row = db.execute("SELECT c.result,e.status,e.error FROM commands c JOIN execution_commands e ON c.request_id=e.request_id WHERE e.run_id=? AND c.operation='run'", (rid,)).fetchone()
+        if row:
+            command = json.loads(row['result'])
+            return {'run_id':rid,'project_id':project_id,'episode':command.get('episode') or project['name'],
+                    'status':'queued' if row['status'] in {'queued','running'} else 'awaiting_input',
+                    'nodes':[],'admission_only':True,'detail':row['error'] or '命令已受理，执行器正在建立工作区'}
+        return {'run_id':rid,'project_id':project_id,'episode':project['name'],'status':'failed','nodes':[],
+                'admission_only':True,'detail':'当前工作运行记录缺失，请从历史选择可恢复的运行'}
 
     def dispositions(self, project_id):
         with self.connect() as db:

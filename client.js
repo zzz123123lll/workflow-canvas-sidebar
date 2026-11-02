@@ -56,7 +56,7 @@ window.__ModuleLoader__.load({
       return C.faint;
     }
     function statusLabel(status) {
-      return { running: "执行中", pausing: "正在暂停", paused: "已暂停", pending: "待执行", passed: "已完成", completed: "全部完成", skipped: "已跳过", awaiting_input: "等你回复", awaiting_agent: "等待处理", awaiting_approval: "等待审核", failed: "执行失败", blocked: "遇到问题", cancelled: "已停止", creation_ready: "阶段完成", stale: "结果已过期", not_run: "尚未执行" }[status] || "未开始";
+      return { queued: '已受理，等待执行', running: "执行中", pausing: "正在暂停", paused: "已暂停", pending: "待执行", passed: "已完成", completed: "全部完成", skipped: "已跳过", awaiting_input: "等你回复", awaiting_agent: "等待处理", awaiting_approval: "等待审核", failed: "执行失败", blocked: "遇到问题", cancelled: "已停止", creation_ready: "阶段完成", stale: "结果已过期", not_run: "尚未执行" }[status] || "未开始";
     }
     var ACTIVE_RUN_STATUSES = ["running", "pausing", "paused", "awaiting_input", "awaiting_agent", "awaiting_approval", "stopping"];
     function runActive(status) { return ACTIVE_RUN_STATUSES.indexOf(status) !== -1; }
@@ -543,7 +543,7 @@ window.__ModuleLoader__.load({
         if (!current || busy) return;
         setBusy(true);
         postJson('/projects/' + operation, Object.assign({ project_id: current.project_id,
-          expected_revision: current.revision, request_id: commandId(), run_id: runId }, extra || {}))
+          expected_revision: current.revision, expected_work_revision: current.work_revision || 0, request_id: commandId(), run_id: runId }, extra || {}))
           .then(function () { if (epoch === projectEpochRef.current) { selectProject(current.project_id); setProjectOpen(true); } })
           .catch(function (e) { if (epoch === projectEpochRef.current) setMsg(e.message); })
           .finally(function () { setBusy(false); });
@@ -927,6 +927,10 @@ window.__ModuleLoader__.load({
           return postRunCommand("/wf/run", body);
         }).then(function (accepted) {
           if (epoch !== projectEpochRef.current) return;
+          if (accepted && accepted.work_revision && projectRef.current) {
+            projectRef.current = Object.assign({}, projectRef.current, { work_revision: accepted.work_revision, work_run_id: accepted.run_id });
+            setProject(projectRef.current);
+          }
           if (accepted && accepted.run_id) { selectedRunRef.current = accepted.run_id; setViewingRun(accepted.run_id); }
           startingRef.current = true;
           startTriesRef.current = 0;
@@ -2083,6 +2087,7 @@ window.__ModuleLoader__.load({
           h("span", { style: { fontSize: 10.5, color: C.faint, maxWidth: 140, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" } }, project ? '项目独立流程' : (activeWorkflow.name || "")),
           ToolButton("保存", save),
           run && run.status === "paused" ? ToolButton("继续", resumeRun, true)
+            : run && run.status === 'queued' ? ToolButton('等待执行…', function () {}, true, true)
             : run && run.status === "running" ? ToolButton("运行中…", function () {}, true, true)
             : run && run.status === "pausing" ? ToolButton("正在暂停…", function () {}, true, true)
             : run && run.status === "stopping" ? ToolButton("正在停止…", function () {}, true, true)

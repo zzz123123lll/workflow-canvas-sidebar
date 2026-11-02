@@ -1282,8 +1282,10 @@ class Handler(BaseHTTPRequestHandler):
             if projects_store().owner(q['run_id']) != q['project_id']:
                 return self.send_json(409, {'ok': False, 'error': '运行不属于当前项目'})
         if path == '/api/wf/results' and q.get('project_id') and not q.get('run_id'):
-            runs = projects_store().runs(q['project_id'])
-            return self.send_json(200, build_results_payload(runs[0]) if runs else {'ok': True, 'run': None,
+            store = projects_store(); project = store.get(q['project_id'])
+            runs = store.runs(q['project_id'])
+            chosen = next((r for r in runs if r['run_id'] == project.get('delivery_run_id')), None) or store.current_run(q['project_id'])
+            return self.send_json(200, build_results_payload(chosen) if chosen and not chosen.get('admission_only') else {'ok': True, 'run': chosen,
                 'artifacts': [], 'primary': [], 'checks': [], 'stale_nodes': [], 'deliverable': False})
         if path == "/api/projects":
             store = projects_store()
@@ -1539,8 +1541,8 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send_json(404, {"ok": False, "error": "文件不存在"})
             return self.send_file(full, as_rel(rel), download=q.get("download") == "1")
         if path == "/api/wf/status" and query_params(self.path).get('project_id'):
-            runs = projects_store().runs(query_params(self.path)['project_id'])
-            return self.send_json(200, {'ok': True, 'run': annotate_run(runs[0]) if runs else None})
+            current = projects_store().current_run(query_params(self.path)['project_id'])
+            return self.send_json(200, {'ok': True, 'run': annotate_run(current) if current else None})
         if path == "/api/wf/history" and query_params(self.path).get('project_id'):
             runs = projects_store().runs(query_params(self.path)['project_id'])
             return self.send_json(200, {'ok': True, 'runs': list(reversed(runs[:30]))})

@@ -33,6 +33,7 @@ def results(state):
 
 def command(store, project, operation, rid, **extra):
     return store.mutate(operation, {'project_id': project['project_id'], 'expected_revision': project['revision'],
+        'expected_work_revision':project.get('work_revision',0),
         'request_id': operation + rid, 'run_id': rid, **extra})['project']
 
 
@@ -81,3 +82,15 @@ def test_cross_project_selection_stale_commands_and_proposals_are_rejected(tmp_p
     with pytest.raises(Conflict):
         store.mutate('set-work-run', {'project_id': project['project_id'], 'expected_revision': 1,
             'request_id': 'new-stale-command', 'run_id': 'run-real'})
+
+
+def test_new_admission_is_current_before_workspace_creation_and_changes_selection_revision(tmp_path):
+    store,project=fixture(tmp_path)
+    run(store,project,'run-old')
+    project=store.mutate('update',{'project_id':project['project_id'],'expected_revision':1,
+        'request_id':'add-graph','graph':{'nodes':[{'id':'write','module':'writer'}],'edges':[]}})['project']
+    accepted,_=store.admit_run({'project_id':project['project_id'],'expected_revision':project['revision'],'request_id':'new-run'})
+    data=overview(store,project['project_id'],results)
+    assert data['current_run']['run_id']==accepted['run_id']
+    assert data['current_run']['status']=='queued' and data['project_status']=='preparing'
+    with pytest.raises(Conflict):command(store,project,'set-work-run','run-old')
