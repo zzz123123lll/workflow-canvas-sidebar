@@ -908,7 +908,7 @@ def exec_agent(node, stem, run_id, state):
     for _, target in archive_targets:
         kb.safe_rel(target, task=task_id)
     checklist = list(node.get("checklist") or [])
-    required_knowledge = list(node.get('required_knowledge') or [])
+    required_knowledge = [_knowledge_requirement(value, task_id) or value for value in (node.get('required_knowledge') or [])]
     required_knowledge.extend(reference for reference in (_knowledge_requirement(req, task_id) for req in node.get('requires', [])) if reference)
     context_path = kb.context_pack(task_id, query=str(node.get('agent_prompt') or node.get('name') or ''),
                                    module=str(node.get('module') or node.get('name') or node_id), required_paths=required_knowledge)

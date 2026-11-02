@@ -49,13 +49,20 @@ def reject_secret(value):
 
 def export_project(base, store, wf, project_id, materials=False):
     project = store.get(project_id)
+    def portable(definition):
+        value = dict(definition)
+        prefix = 'tasks/' + project_id + '/files/'
+        for field in ['required_knowledge', 'requires']:
+            if isinstance(value.get(field), list):
+                value[field] = ['files/' + p[len(prefix):] if isinstance(p, str) and p.startswith(prefix) else p for p in value[field]]
+        return value
     selected = {n['module'] for n in project['graph']['nodes']}
-    modules = [{k:v for k,v in m.items() if k in MODULE_FIELDS} for m in wf.load_modules() if m['id'] in selected]
+    modules = [portable({k:v for k,v in m.items() if k in MODULE_FIELDS}) for m in wf.load_modules() if m['id'] in selected]
     if selected != {m['id'] for m in modules}:raise ValueError('项目引用的模块定义缺失，请先修复流程')
-    portable = {k:project[k] for k in ['name','goal','delivery']}
-    portable['graph'] = {'nodes':[{k:v for k,v in n.items() if k in NODE_FIELDS} for n in project['graph']['nodes']],
+    portable_project = {k:project[k] for k in ['name','goal','delivery']}
+    portable_project['graph'] = {'nodes':[portable({k:v for k,v in n.items() if k in NODE_FIELDS}) for n in project['graph']['nodes']],
                          'edges':[{k:e[k] for k in ['from','to']} for e in project['graph']['edges']]}
-    package = {'schema':'canvas.project/v1','project':portable,
+    package = {'schema':'canvas.project/v1','project':portable_project,
                'modules':modules,'materials':[],
                'notice':'仅包含AI项目定义和主动选择的项目资料；不含账号、会话、成果历史、共享资料或机器工具/程序校验配置。导入不会运行；本机程序校验需重新配置。'}
     reject_secret(package)

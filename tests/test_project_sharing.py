@@ -49,6 +49,20 @@ def test_project_roundtrip_is_explicit_and_does_not_copy_private_state(sharing):
     with pytest.raises(Conflict):import_project(base,store,wf,dict(body,package=changed))
 
 
+def test_imported_project_reads_its_own_material_references(sharing):
+    base,store,wf,project=sharing
+    graph=project['graph']
+    graph['nodes'][0]['required_knowledge']=['tasks/'+project['project_id']+'/files/source.md']
+    project=store.mutate('update',{'project_id':project['project_id'],'expected_revision':project['revision'],
+        'request_id':'bind-source','graph':graph})['project']
+    package=export_project(base,store,wf,project['project_id'],materials=True)
+    assert package['project']['graph']['nodes'][0]['required_knowledge']==['files/source.md']
+    imported=import_project(base,store,wf,{'request_id':'import-with-reference','package':package})['project']
+    reference=wf._knowledge_requirement(imported['graph']['nodes'][0]['required_knowledge'][0],imported['project_id'])
+    assert reference=='tasks/'+imported['project_id']+'/files/source.md'
+    assert (base/'kb/knowledge'/reference).read_text(encoding='utf-8')=='Original synthetic source'
+
+
 @pytest.mark.parametrize('name',['../outside.md','nested/../../outside.md','C:/outside.md','nested\\outside.md','a//b.md','CON.txt'])
 def test_import_rejects_invalid_material_paths_before_creating_project(sharing,name):
     base,store,wf,project=sharing
