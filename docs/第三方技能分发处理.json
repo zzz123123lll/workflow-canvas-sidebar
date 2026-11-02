@@ -86,8 +86,8 @@
     "commit": "69d904738256116d4ee8c496aa5c1c02a756007a",
     "declared_license": "MIT",
     "manifest_sha256": "7b968875fefeb4ebde20f77cfa769a9469f652bc98b9385629e55675b5a0053a",
-    "decision": "not-distributed",
-    "reason": "首发模板已使用原创职责与指南；此第三方文档不进入源码或安装资产，原本机安装不变。"
+    "decision": "distributed-compatibility-library",
+    "reason": "保留server/vendor/qc的MIT原始源码与LICENSE，供已有程序QC模块兼容；首发模板不绑定此技能。版本、来源归档与哈希见dependencies.lock.json的vendored条目。"
   },
   {
     "id": "ffmpeg",
