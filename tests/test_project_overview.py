@@ -92,5 +92,6 @@ def test_new_admission_is_current_before_workspace_creation_and_changes_selectio
     accepted,_=store.admit_run({'project_id':project['project_id'],'expected_revision':project['revision'],'request_id':'new-run'})
     data=overview(store,project['project_id'],results)
     assert data['current_run']['run_id']==accepted['run_id']
-    assert data['current_run']['status']=='queued' and data['project_status']=='preparing'
+    assert data['current_run']['status']=='queued' and data['project_status']=='queued'
+    assert data['project_status_label']=='排队中'
     with pytest.raises(Conflict):command(store,project,'set-work-run','run-old')

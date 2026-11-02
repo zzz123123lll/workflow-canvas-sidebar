@@ -1,6 +1,6 @@
 """Project work and delivery are explicit; history is retained without becoming a current blocker."""
 
-LABELS = {'preparing': '准备中', 'running': '执行中', 'needs_attention': '需要处理',
+LABELS = {'preparing': '准备中', 'queued': '排队中', 'running': '执行中', 'needs_attention': '需要处理',
           'awaiting_review': '待审阅', 'deliverable': '可交付', 'revising': '修订中', 'archived': '已归档'}
 
 
@@ -40,6 +40,8 @@ def overview(store, project_id, results_for):
     current_result = result_map.get(current['run_id'], {}) if current else {}
     if project['archived']:
         status = 'archived'
+    elif current and current.get('status') == 'queued':
+        status = 'queued'
     elif current and current.get('status') in {'running', 'pausing', 'stopping'}:
         status = 'revising' if delivery and delivery['run_id'] != current['run_id'] else 'running'
     elif pending:

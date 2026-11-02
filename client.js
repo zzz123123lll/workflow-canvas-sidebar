@@ -915,7 +915,7 @@ window.__ModuleLoader__.load({
       async function runWorkflow() {
         var epoch = projectEpochRef.current;
         if (selectedRunRef.current) { setMsg("请先返回编辑，再启动新任务。"); return; }
-        var ep = await askText(projectRef.current ? "本次运行名称（资料保存在当前项目）" : "给这次任务起个名字（自动使用同名知识分区）", stateRef.current.kbTask || (stateRef.current.run && stateRef.current.run.episode) || "新任务");
+        var ep = await askText(projectRef.current ? "本次运行名称（资料保存在当前项目）" : "给这次任务起个名字（自动使用同名知识分区）", projectRef.current ? projectRef.current.name : (stateRef.current.kbTask || (stateRef.current.run && friendlyRunName(stateRef.current.run)) || "新任务"));
         if (!ep || epoch !== projectEpochRef.current) return;
         setBusy(true);
         save().then(function () {
@@ -2128,7 +2128,7 @@ window.__ModuleLoader__.load({
           h("div", { style: { flex: 1 } }),
           run ? h("span", {
             style: { fontFamily: "Consolas,monospace", fontSize: 10.5, color: statusColor(run.status), border: "1px solid " + statusColor(run.status), borderRadius: 99, padding: "3px 9px" },
-          }, (run.episode || "") + " · " + monitor.title) : null
+          }, friendlyRunName(run) + " · " + monitor.title) : null
         ),
         viewingRun ? h("div", { style: { display: "flex", gap: 12, alignItems: "center", padding: "9px 14px", background: "#132b30", color: C.teal, fontSize: 12 } },
           h("strong", null, "运行查看模式 · 只读快照"), h("span", { style: { flex: 1, fontFamily: "Consolas,monospace" } }, viewingRun),
@@ -2137,7 +2137,7 @@ window.__ModuleLoader__.load({
         h("div", { "data-execution-overview": monitor.mode, role: "status", style: { padding: "11px 15px", background: monitor.mode === "running" ? "#171c27" : C.panel, borderBottom: "1px solid " + C.border, color: C.text } },
           h("div", { style: { display: "flex", gap: 12, alignItems: "center", flexWrap: "wrap" } },
             h("strong", { style: { color: monitor.mode === "completed" ? C.teal : monitor.connected ? C.accent : C.danger, fontSize: 14 } }, monitor.title),
-            h("span", { style: { fontSize: 12 } }, run ? (run.episode || "") + " · " + monitor.complete + "/" + monitor.total + " 步已结束" + (monitor.skipped ? "（含 " + monitor.skipped + " 步跳过）" : "") : (graph.nodes || []).length + " 个步骤待执行，点「运行」开始"),
+            h("span", { style: { fontSize: 12 } }, run ? friendlyRunName(run) + " · " + monitor.complete + "/" + monitor.total + " 步已结束" + (monitor.skipped ? "（含 " + monitor.skipped + " 步跳过）" : "") : (graph.nodes || []).length + " 个步骤待执行，点「运行」开始"),
             h("span", { style: { fontSize: 11, color: C.sub, marginLeft: "auto" } }, monitor.connected ? "状态已同步 · " + Math.max(0, Math.floor(Date.now()/1000-runtimeSync)) + "秒前" : "未收到最新状态")),
           run ? h("div", { role: "progressbar", "aria-valuemin": 0, "aria-valuemax": monitor.total, "aria-valuenow": monitor.complete, "aria-label": "已完成或跳过的步骤", style: { height: 5, background: C.border, borderRadius: 9, marginTop: 9, overflow: "hidden" } }, h("div", { style: { width: monitor.percent + "%", height: "100%", background: C.teal, transition: "width 250ms ease-out" } })) : null,
           monitor.active.length ? h("div", { style: { fontSize: 11, marginTop: 8, color: C.sub } }, monitor.active.map(function (n) {
@@ -2598,7 +2598,7 @@ window.__ModuleLoader__.load({
 
             h("div", { style: { marginTop: 22, fontSize: 11.5, fontWeight: 700 } }, "运行状态"),
             h("div", { style: { marginTop: 7, fontFamily: "Consolas,monospace", fontSize: 10, color: C.faint, lineHeight: 1.9 } },
-              run ? "最近：" + (run.episode || "") + " · " + run.status : "暂无运行", h("br"), "节点颜色跟随最近一次运行状态"),
+              run ? "最近：" + friendlyRunName(run) + " · " + statusLabel(run.status) : "暂无运行", h("br"), "节点颜色跟随最近一次运行状态"),
             h("div", { style: { marginTop: 20, fontSize: 11.5, fontWeight: 700 } }, "快捷键"),
             h("div", { style: { marginTop: 7, fontSize: 10.5, color: C.faint, lineHeight: 1.9 } },
               "Ctrl+S 保存", h("br"), "Ctrl+Z / Shift+Ctrl+Z 撤销/重做", h("br"), "Delete 删除选中", h("br"), "滚轮缩放 · 空白拖动平移"),
