@@ -20,6 +20,7 @@ import stat
 import subprocess
 import sys
 import threading
+import tempfile
 import time
 import urllib.error
 import urllib.parse
@@ -303,9 +304,17 @@ def render(*, workspace, project, entry, composition, output, scratch="scratch/r
     config = {"workspace": str(root), "project": str(project_path), "entry": str(entry_path),
               "composition": composition, "output": str(output_path), "scratch": str(invocation),
               "nodeModules": str(NODE_MODULES), "browser": str(CHROME)}
-    result = _run([str(NODE), str(script), json.dumps(config, ensure_ascii=False)],
-                  cwd=invocation, env=_environment(invocation), timeout=timeout, tree=True,
-                  cancel_event=cancel_event)
+    # Chrome's internal cache paths still hit Windows path limits when its
+    # profile sits below a deeply nested project workspace. Keep only browser
+    # runtime files in a new short temporary directory; project/bundle/output
+    # paths remain scoped to the workspace.
+    with tempfile.TemporaryDirectory(prefix='wc-render-') as browser_temp:
+        browser_root = Path(browser_temp).resolve()
+        if browser_root.parent != Path(tempfile.gettempdir()).resolve() or not browser_root.name.startswith('wc-render-'):
+            raise ValueError('Unexpected browser temporary directory')
+        result = _run([str(NODE), str(script), json.dumps(config, ensure_ascii=False)],
+                      cwd=invocation, env=_environment(browser_root), timeout=timeout, tree=True,
+                      cancel_event=cancel_event)
     if result.returncode:
         raise ValueError("Remotion render failed: " + _redact(result.stderr or "No diagnostic output"))
     output_path = _within(root, output)

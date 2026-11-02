@@ -85,7 +85,10 @@ def test_render_uses_fixed_runtime_and_scoped_javascript(tool):
     assert config["nodeModules"] == str(module.NODE_MODULES)
     assert config["output"] == str(workspace / "episodes/final.mp4")
     assert Path(options["cwd"]).is_relative_to(workspace)
-    assert Path(options["env"]["TEMP"]).is_relative_to(workspace)
+    browser_temp = Path(options["env"]["TEMP"])
+    assert browser_temp.parent.name.startswith('wc-render-')
+    assert browser_temp.parent.parent == Path(module.tempfile.gettempdir())
+    assert not browser_temp.exists(), 'browser runtime is cleaned after the render'
     assert "DEEPSEEK_API_KEY" not in options["env"]
     assert "ELEVENLABS_API_KEY" not in options["env"]
 
