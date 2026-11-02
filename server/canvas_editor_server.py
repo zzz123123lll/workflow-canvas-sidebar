@@ -736,7 +736,7 @@ def artifact_rows(state, node, sources=None):
         # A frozen file represents this logical output for this generation.
         # Never substitute a newer working copy, even if the snapshot is missing.
         logical = as_rel(item.get('logical_path'))
-        if logical:
+        if logical and logical != rel:
             seen.add(logical)
         try:
             full = contained_path(BASE, rel)
