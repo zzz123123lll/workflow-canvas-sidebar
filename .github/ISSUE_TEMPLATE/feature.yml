@@ -1,0 +1,9 @@
+name: Feature request
+description: A concrete task that is difficult today
+body:
+  - type: textarea
+    id: task
+    attributes:
+      label: What task are you trying to complete and where do you get stuck?
+    validations:
+      required: true

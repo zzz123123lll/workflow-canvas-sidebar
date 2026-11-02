@@ -1,0 +1,15 @@
+name: Compatibility report
+description: Report a tested host or system combination
+body:
+  - type: input
+    id: versions
+    attributes:
+      label: OS, host version and plugin build
+    validations:
+      required: true
+  - type: textarea
+    id: checks
+    attributes:
+      label: Install, real task, conversation continuation, stop, restart and export results
+    validations:
+      required: true

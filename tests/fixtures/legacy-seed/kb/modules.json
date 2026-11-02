@@ -1,0 +1,567 @@
+{
+  "version": 2,
+  "note": "模块由 DeepSeek Harness 自动执行；只读取当前任务分区，验证后的文档自动保存回该分区。",
+  "modules": [
+    {
+      "id": "video_brief",
+      "name": "01 明确任务",
+      "category": "知识讲解全流程",
+      "kind": "agent",
+      "executor": "agent",
+      "description": "从本任务资料确定选题、单一主结论、受众、平台、时长、画幅、声音、素材与约束。已有信息不重复询问；缺少选题等关键决定则needs_input。未指定的制作参数给出明确默认值并写进brief：知识讲解、1",
+      "agent_prompt": "从本任务资料确定选题、单一主结论、受众、平台、时长、画幅、声音、素材与约束。已有信息不重复询问；缺少选题等关键决定则needs_input。未指定的制作参数给出明确默认值并写进brief：知识讲解、16:9、1080p、30fps、约90秒、中文旁白；用户指定值优先。brief.json包含topic/audience/duration_seconds/width/height/fps/voice/source_policy。\n所有人类可读文档及问题用中文。请读取绑定skill主文件与重点参考，按本模块输入输出约定适配；上游skill的安装/开预览/发布建议不能替代本插件执行约定。",
+      "skills": [
+        "director"
+      ],
+      "skill_focus": {
+        "director": [
+          "references/production-workflow.md"
+        ]
+      },
+      "requires": [],
+      "artifacts": [
+        "episodes/{stem}-brief.json",
+        "episodes/{stem}-brief.md"
+      ],
+      "checklist": [
+        "真实完成本步骤要求，声明文件或目录可读取且不是占位结果",
+        "输入来源和实际测量可追溯，未把计划或自报当执行证据"
+      ],
+      "timeout_seconds": 1800,
+      "retry": 0,
+      "plain": {
+        "一句话": "明确任务，执行时加载绑定的GitHub skills",
+        "产出什么": "episodes/{stem}-brief.json、episodes/{stem}-brief.md",
+        "新手提示": "点运行自动执行；缺资料或工具会提问"
+      },
+      "knowledge_aliases": {
+        "episodes/{stem}-brief.md": "brief.md"
+      }
+    },
+    {
+      "id": "video_research",
+      "name": "02 调研与核实",
+      "category": "知识讲解全流程",
+      "kind": "agent",
+      "executor": "agent",
+      "description": "先查当前任务资料。资料充分时整理证据；需要外部事实时使用已注册tvly search --json，不调用deep research、不登录不安装更新。sources.json逐项记录claim/so",
+      "agent_prompt": "先查当前任务资料。资料充分时整理证据；需要外部事实时使用已注册tvly search --json，不调用deep research、不登录不安装更新。sources.json逐项记录claim/source_url或任务文件路径/检索日期/证据摘述及不确定性。不能编来源或数据；额度用尽或缺关键证据则提问暂停。\n所有人类可读文档及问题用中文。请读取绑定skill主文件与重点参考，按本模块输入输出约定适配；上游skill的安装/开预览/发布建议不能替代本插件执行约定。",
+      "skills": [
+        "tavily-search",
+        "tavily-cli"
+      ],
+      "skill_focus": {},
+      "requires": [],
+      "artifacts": [
+        "episodes/{stem}-research.md",
+        "episodes/{stem}-sources.json"
+      ],
+      "checklist": [
+        "真实完成本步骤要求，声明文件或目录可读取且不是占位结果",
+        "输入来源和实际测量可追溯，未把计划或自报当执行证据"
+      ],
+      "timeout_seconds": 1800,
+      "retry": 0,
+      "plain": {
+        "一句话": "调研与核实，执行时加载绑定的GitHub skills",
+        "产出什么": "episodes/{stem}-research.md、episodes/{stem}-sources.json",
+        "新手提示": "点运行自动执行；缺资料或工具会提问"
+      },
+      "knowledge_aliases": {
+        "episodes/{stem}-research.md": "research.md"
+      }
+    },
+    {
+      "id": "video_script",
+      "name": "03 撰写讲解脚本",
+      "category": "知识讲解全流程",
+      "kind": "agent",
+      "executor": "agent",
+      "description": "根据brief和已核实来源写可朗读的中文脚本：钩子、核心解释、例子、边界、结尾。每段关联来源，字数符合时长。script.json包含title、narration（完整旁白文本）、segments:",
+      "agent_prompt": "根据brief和已核实来源写可朗读的中文脚本：钩子、核心解释、例子、边界、结尾。每段关联来源，字数符合时长。script.json包含title、narration（完整旁白文本）、segments:[{id,text,source_ids,visual_idea}]；事实未证实不要强化成结论。导演skill按非叙事知识讲解模式使用，不套用电影对白。\n所有人类可读文档及问题用中文。请读取绑定skill主文件与重点参考，按本模块输入输出约定适配；上游skill的安装/开预览/发布建议不能替代本插件执行约定。",
+      "skills": [
+        "director"
+      ],
+      "skill_focus": {
+        "director": [
+          "references/genre-playbooks.md"
+        ]
+      },
+      "requires": [],
+      "artifacts": [
+        "episodes/{stem}-script.json",
+        "episodes/{stem}-script.md"
+      ],
+      "checklist": [
+        "真实完成本步骤要求，声明文件或目录可读取且不是占位结果",
+        "输入来源和实际测量可追溯，未把计划或自报当执行证据"
+      ],
+      "timeout_seconds": 1800,
+      "retry": 0,
+      "plain": {
+        "一句话": "撰写讲解脚本，执行时加载绑定的GitHub skills",
+        "产出什么": "episodes/{stem}-script.json、episodes/{stem}-script.md",
+        "新手提示": "点运行自动执行；缺资料或工具会提问"
+      }
+    },
+    {
+      "id": "video_storyboard",
+      "name": "04 分镜与画面规划",
+      "category": "知识讲解全流程",
+      "kind": "agent",
+      "executor": "agent",
+      "description": "把脚本拆成观点/证据/例子的镜头与可视化，规定构图、屏幕文字、转场和所需素材。storyboard.json含composition_id='Explain'、scenes:[{id,segment_",
+      "agent_prompt": "把脚本拆成观点/证据/例子的镜头与可视化，规定构图、屏幕文字、转场和所需素材。storyboard.json含composition_id='Explain'、scenes:[{id,segment_ids,visual_type,on_screen_text,visual_description,estimated_seconds,asset_requirements}]。此处时长为计划；剪辑必须以后续真实配音时长重新对齐。\n所有人类可读文档及问题用中文。请读取绑定skill主文件与重点参考，按本模块输入输出约定适配；上游skill的安装/开预览/发布建议不能替代本插件执行约定。",
+      "skills": [
+        "director"
+      ],
+      "skill_focus": {
+        "director": [
+          "assets/shot-plan-template.md",
+          "references/cinematic-language.md"
+        ]
+      },
+      "requires": [],
+      "artifacts": [
+        "episodes/{stem}-storyboard.json",
+        "episodes/{stem}-storyboard.md"
+      ],
+      "checklist": [
+        "真实完成本步骤要求，声明文件或目录可读取且不是占位结果",
+        "输入来源和实际测量可追溯，未把计划或自报当执行证据"
+      ],
+      "timeout_seconds": 1800,
+      "retry": 0,
+      "plain": {
+        "一句话": "分镜与画面规划，执行时加载绑定的GitHub skills",
+        "产出什么": "episodes/{stem}-storyboard.json、episodes/{stem}-storyboard.md",
+        "新手提示": "点运行自动执行；缺资料或工具会提问"
+      }
+    },
+    {
+      "id": "video_visuals",
+      "name": "05 制作画面与素材",
+      "category": "知识讲解全流程",
+      "kind": "agent",
+      "executor": "agent",
+      "description": "按分镜创建独立可编辑Remotion项目，放入声明visuals目录（src/index.tsx注册根、Root.tsx注册composition Explain、public/放本任务素材、pack",
+      "agent_prompt": "按分镜创建独立可编辑Remotion项目，放入声明visuals目录（src/index.tsx注册根、Root.tsx注册composition Explain、public/放本任务素材、package.json仅声明已装依赖）。使用解释性图表、排版、示意画面和用户已提供素材。无须执行npx create-video/npm install，也不读取其他任务工程。素材缺少且不可用图形表达时询问；不得伪造现场影像或未经授权调用付费生成。assets.json记录每项素材来源/许可与项目入口。\n所有人类可读文档及问题用中文。请读取绑定skill主文件与重点参考，按本模块输入输出约定适配；上游skill的安装/开预览/发布建议不能替代本插件执行约定。\n上游 capture 目录的 canvas-main.png 是当前运行界面的真实截图，必须优先作为画面素材使用，并在 assets.json 记录 source=canvas-capture/url/时间/sha；不得只用示意几何替代真实界面。\n上游 capture 目录同时提供 canvas-operation.mp4（3 秒真实操作录屏）时必须至少使用 2 段视频片段（Remotion OffthreadVideo/Video），并配合推拉、局部放大或高亮动效；禁止全片只用静态图。",
+      "skills": [
+        "remotion-create",
+        "remotion-markup"
+      ],
+      "skill_focus": {
+        "remotion-create": [
+          "video-layout.md"
+        ],
+        "remotion-markup": [
+          "compositions.md",
+          "multi-scene-video.md"
+        ]
+      },
+      "requires": [
+        "artifacts/{run_id}/capture"
+      ],
+      "artifacts": [
+        "artifacts/{run_id}/visuals",
+        "episodes/{stem}-assets.json"
+      ],
+      "checklist": [
+        "真实完成本步骤要求，声明文件或目录可读取且不是占位结果",
+        "输入来源和实际测量可追溯，未把计划或自报当执行证据"
+      ],
+      "timeout_seconds": 2400,
+      "retry": 0,
+      "plain": {
+        "一句话": "制作画面与素材，执行时加载绑定的GitHub skills",
+        "产出什么": "artifacts/{run_id}/visuals、episodes/{stem}-assets.json",
+        "新手提示": "点运行自动执行；缺资料或工具会提问"
+      }
+    },
+    {
+      "id": "video_voice",
+      "name": "06 生成配音",
+      "category": "知识讲解全流程",
+      "kind": "agent",
+      "executor": "agent",
+      "description": "读取script.json的narration，按brief声线通过已装python -m edge_tts合成，默认zh-CN-XiaoxiaoNeural；同时--write-subtitles到",
+      "agent_prompt": "读取script.json的narration，按brief声线通过已装python -m edge_tts合成，默认zh-CN-XiaoxiaoNeural；同时--write-subtitles到声明voice.srt。以ffprobe测量真实音频时长并写voice.json（duration_seconds/voice/source_script/segments等），不要用字数估算冒充测量；在线服务不可用则提问，不替换成静音。\n所有人类可读文档及问题用中文。请读取绑定skill主文件与重点参考，按本模块输入输出约定适配；上游skill的安装/开预览/发布建议不能替代本插件执行约定。",
+      "skills": [
+        "edge-tts"
+      ],
+      "skill_focus": {},
+      "requires": [],
+      "artifacts": [
+        "episodes/{stem}-narration.mp3",
+        "episodes/{stem}-voice.srt",
+        "episodes/{stem}-voice.json"
+      ],
+      "checklist": [
+        "真实完成本步骤要求，声明文件或目录可读取且不是占位结果",
+        "输入来源和实际测量可追溯，未把计划或自报当执行证据"
+      ],
+      "timeout_seconds": 1800,
+      "retry": 0,
+      "plain": {
+        "一句话": "生成配音，执行时加载绑定的GitHub skills",
+        "产出什么": "episodes/{stem}-narration.mp3、episodes/{stem}-voice.srt、episodes/{stem}-voice.json",
+        "新手提示": "点运行自动执行；缺资料或工具会提问"
+      }
+    },
+    {
+      "id": "video_captions",
+      "name": "07 字幕与时间对齐",
+      "category": "知识讲解全流程",
+      "kind": "agent",
+      "executor": "agent",
+      "description": "从真实voice.srt/音频时长制作交付SRT与Remotion字幕JSON；保持原文，用实际时间戳，核对无负时长/重叠/越界和中文可读长度，不用估时假装对齐。captions.json包括cues",
+      "agent_prompt": "从真实voice.srt/音频时长制作交付SRT与Remotion字幕JSON；保持原文，用实际时间戳，核对无负时长/重叠/越界和中文可读长度，不用估时假装对齐。captions.json包括cues和duration_seconds；无法获得真实对齐时提问。\n所有人类可读文档及问题用中文。请读取绑定skill主文件与重点参考，按本模块输入输出约定适配；上游skill的安装/开预览/发布建议不能替代本插件执行约定。",
+      "skills": [
+        "remotion-captions"
+      ],
+      "skill_focus": {},
+      "requires": [],
+      "artifacts": [
+        "episodes/{stem}-captions.srt",
+        "episodes/{stem}-captions.json"
+      ],
+      "checklist": [
+        "真实完成本步骤要求，声明文件或目录可读取且不是占位结果",
+        "输入来源和实际测量可追溯，未把计划或自报当执行证据"
+      ],
+      "timeout_seconds": 1800,
+      "retry": 0,
+      "plain": {
+        "一句话": "字幕与时间对齐，执行时加载绑定的GitHub skills",
+        "产出什么": "episodes/{stem}-captions.srt、episodes/{stem}-captions.json",
+        "新手提示": "点运行自动执行；缺资料或工具会提问"
+      }
+    },
+    {
+      "id": "video_edit",
+      "name": "08 剪辑与声音合成",
+      "category": "知识讲解全流程",
+      "kind": "agent",
+      "executor": "agent",
+      "description": "复制上游visuals项目到声明edit目录，嵌入本任务真实配音/字幕/素材到自身public，使项目自包含。按真实语音和字幕时间编排画面、转场、片头尾与字幕安全区，composition_id Ex",
+      "agent_prompt": "复制上游visuals项目到声明edit目录，嵌入本任务真实配音/字幕/素材到自身public，使项目自包含。按真实语音和字幕时间编排画面、转场、片头尾与字幕安全区，composition_id Explain。没有授权BGM则用干净旁白，不能擅自下载版权音乐。edit.json记录entry、composition_id、真实duration_seconds、fps、宽高、字幕/声音路径。项目不包含node_modules，依赖由注册Remotion helper只读提供。\n所有人类可读文档及问题用中文。请读取绑定skill主文件与重点参考，按本模块输入输出约定适配；上游skill的安装/开预览/发布建议不能替代本插件执行约定。",
+      "skills": [
+        "remotion-multimedia",
+        "remotion-best-practices",
+        "remotion-markup"
+      ],
+      "skill_focus": {
+        "remotion-markup": [
+          "video-editing.md",
+          "sequencing.md",
+          "audio.md"
+        ]
+      },
+      "requires": [],
+      "artifacts": [
+        "artifacts/{run_id}/edit",
+        "episodes/{stem}-edit.json"
+      ],
+      "checklist": [
+        "真实完成本步骤要求，声明文件或目录可读取且不是占位结果",
+        "输入来源和实际测量可追溯，未把计划或自报当执行证据"
+      ],
+      "timeout_seconds": 3600,
+      "retry": 0,
+      "plain": {
+        "一句话": "剪辑与声音合成，执行时加载绑定的GitHub skills",
+        "产出什么": "artifacts/{run_id}/edit、episodes/{stem}-edit.json",
+        "新手提示": "点运行自动执行；缺资料或工具会提问"
+      }
+    },
+    {
+      "id": "video_render",
+      "name": "09 导出成片",
+      "category": "知识讲解全流程",
+      "kind": "agent",
+      "executor": "agent",
+      "description": "读取edit.json，用注册wf_video_tools.py render导出真实MP4，显式workspace/project/entry/composition/output；输出H264并包",
+      "agent_prompt": "读取edit.json，用注册wf_video_tools.py render导出真实MP4，显式workspace/project/entry/composition/output；输出H264并包含旁白，别用静态占位文件或只写计划代替成片。调用ffprobe核实可解码、分辨率、fps、时长和音轨，写render.json。工具失败准确记录并needs_input，不能自报完成。\n所有人类可读文档及问题用中文。请读取绑定skill主文件与重点参考，按本模块输入输出约定适配；上游skill的安装/开预览/发布建议不能替代本插件执行约定。",
+      "skills": [
+        "remotion-render"
+      ],
+      "skill_focus": {},
+      "requires": [],
+      "artifacts": [
+        "episodes/{stem}.mp4",
+        "episodes/{stem}-render.json"
+      ],
+      "checklist": [
+        "真实完成本步骤要求，声明文件或目录可读取且不是占位结果",
+        "输入来源和实际测量可追溯，未把计划或自报当执行证据"
+      ],
+      "timeout_seconds": 3600,
+      "retry": 0,
+      "plain": {
+        "一句话": "导出成片，执行时加载绑定的GitHub skills",
+        "产出什么": "episodes/{stem}.mp4、episodes/{stem}-render.json",
+        "新手提示": "点运行自动执行；缺资料或工具会提问"
+      },
+      "validation": {
+        "type": "video_render",
+        "media": "episodes/{stem}.mp4",
+        "spec": "episodes/{stem}-edit.json"
+      }
+    },
+    {
+      "id": "video_qc",
+      "name": "10 技术与内容质检",
+      "category": "知识讲解全流程",
+      "kind": "agent",
+      "executor": "agent",
+      "description": "对真实MP4和字幕按brief规格使用qc_skill.cli检查，并解析report.overall_status，顶层status=completed不代表通过。用ffmpeg skill loo",
+      "agent_prompt": "对真实MP4和字幕按brief规格使用qc_skill.cli检查，并解析report.overall_status，顶层status=completed不代表通过。用ffmpeg skill look.py生成联系表到声明qc-frames目录，并按实际可用read_image检查字幕遮挡/中文字体/画面；未观察项目必须明确未检查。核对脚本事实来源和旁白/画面关系。将完整技术报告及内容检查写qc.json/md；有FAIL或关键UNKNOWN、事实错误则needs_input请求修复，不能放行。\n所有人类可读文档及问题用中文。请读取绑定skill主文件与重点参考，按本模块输入输出约定适配；上游skill的安装/开预览/发布建议不能替代本插件执行约定。\nqc.json必须保留status='completed'和report.overall_status，以及content_review:{status:'PASS'或'NEEDS_REVIEW'}、unresolved:[]明确列出未解决问题。引擎会独立拦截FAIL/UNKNOWN/未审看与未解决事项。\n内容复核必须读取 assets.json 和 capture/canvas-main.png：统计真实界面截图/素材数量与静态比例；如果真实素材为 0 或仍以示意几何冒充产品界面，content_review 不得 PASS，必须标 NEEDS_REVIEW 并写明原因。\n静态门禁：用 QC 的 freezedetect 统计静态累计比例；若静态比例 > 50%、或 capture/canvas-operation.mp4 存在但成片没有真实视频片段，content_review 必须 NEEDS_REVIEW，不得 PASS。",
+      "skills": [
+        "qc",
+        "ffmpeg"
+      ],
+      "skill_focus": {
+        "qc": [
+          "docs/checks.md"
+        ],
+        "ffmpeg": [
+          "references/scripts.md"
+        ]
+      },
+      "requires": [],
+      "artifacts": [
+        "episodes/{stem}-qc.json",
+        "episodes/{stem}-qc.md",
+        "artifacts/{run_id}/qc-frames"
+      ],
+      "checklist": [
+        "真实完成本步骤要求，声明文件或目录可读取且不是占位结果",
+        "输入来源和实际测量可追溯，未把计划或自报当执行证据"
+      ],
+      "timeout_seconds": 3600,
+      "retry": 0,
+      "plain": {
+        "一句话": "技术与内容质检，执行时加载绑定的GitHub skills",
+        "产出什么": "episodes/{stem}-qc.json、episodes/{stem}-qc.md、artifacts/{run_id}/qc-frames",
+        "新手提示": "点运行自动执行；缺资料或工具会提问"
+      },
+      "validation": {
+        "type": "video_qc",
+        "report": "episodes/{stem}-qc.json"
+      }
+    },
+    {
+      "id": "video_delivery",
+      "name": "11 交付与归档",
+      "category": "知识讲解全流程",
+      "kind": "agent",
+      "executor": "agent",
+      "description": "仅在上游QC没有未解决FAIL/关键UNKNOWN时整理交付目录：真实成片、SRT、脚本、来源、质检报告和项目入口清单，检查复制后文件哈希和探测信息。生成用户审核说明，列出已检查/待人工审看项和素材来",
+      "agent_prompt": "仅在上游QC没有未解决FAIL/关键UNKNOWN时整理交付目录：真实成片、SRT、脚本、来源、质检报告和项目入口清单，检查复制后文件哈希和探测信息。生成用户审核说明，列出已检查/待人工审看项和素材来源。不发布或上传。系统自动归档声明文字文档到当前任务分区，二进制成片保留在声明交付目录。\n所有人类可读文档及问题用中文。请读取绑定skill主文件与重点参考，按本模块输入输出约定适配；上游skill的安装/开预览/发布建议不能替代本插件执行约定。\n交付目录必须包含final.mp4（与已验证上游成片哈希相同）、captions.srt、manifest.json；不得重新编码后冒充同一份原片。",
+      "skills": [
+        "ffmpeg",
+        "director"
+      ],
+      "skill_focus": {
+        "director": [
+          "assets/qc-checklist.md"
+        ]
+      },
+      "requires": [],
+      "artifacts": [
+        "artifacts/{run_id}/delivery",
+        "episodes/{stem}-delivery.md"
+      ],
+      "checklist": [
+        "真实完成本步骤要求，声明文件或目录可读取且不是占位结果",
+        "输入来源和实际测量可追溯，未把计划或自报当执行证据"
+      ],
+      "timeout_seconds": 1800,
+      "retry": 0,
+      "plain": {
+        "一句话": "交付与归档，执行时加载绑定的GitHub skills",
+        "产出什么": "artifacts/{run_id}/delivery、episodes/{stem}-delivery.md",
+        "新手提示": "点运行自动执行；缺资料或工具会提问"
+      },
+      "validation": {
+        "type": "video_delivery",
+        "bundle": "artifacts/{run_id}/delivery",
+        "source_media": "episodes/{stem}.mp4"
+      }
+    },
+    {
+      "id": "video_capture",
+      "name": "04b 采集真实界面",
+      "category": "知识讲解全流程",
+      "executor": "capture",
+      "kind": "capture",
+      "description": "用本地 Chrome headless 截取当前运行中的画布/产品界面，产出真实 PNG 与来源清单。",
+      "requires": [
+        "episodes/{stem}-storyboard.json"
+      ],
+      "artifacts": [
+        "artifacts/{run_id}/capture",
+        "episodes/{stem}-capture.json"
+      ],
+      "capture": {
+        "url": "http://127.0.0.1:8792/",
+        "width": 1600,
+        "height": 1000
+      },
+      "checklist": [
+        "截图是真实运行界面，不是示意几何",
+        "记录来源 URL/时间/分辨率"
+      ],
+      "plain": {
+        "一句话": "自动截取当前真实画布界面，作为视频里的真实素材",
+        "产出什么": "capture/canvas-main.png + episodes/{stem}-capture.json",
+        "新手提示": "需要本机 Chrome；截图不是示意几何"
+      }
+    },
+    {
+      "id": "video_fast_assemble",
+      "name": "08b 确定性快装",
+      "category": "知识讲解全流程",
+      "executor": "assemble",
+      "kind": "assemble",
+      "description": "用真实截图 + 真实操作录屏 + 旁白 + 字幕确定性组装成片，不走 agent 从零写 Remotion。",
+      "requires": [
+        "artifacts/{run_id}/capture",
+        "episodes/{stem}-narration.mp3",
+        "episodes/{stem}-captions.srt"
+      ],
+      "artifacts": [
+        "episodes/{stem}-fast.mp4",
+        "episodes/{stem}-fast.json"
+      ],
+      "plain": {
+        "一句话": "把真实截图/录屏+旁白+字幕快速组装成片",
+        "产出什么": "episodes/{stem}-fast.mp4 + fast.json",
+        "新手提示": "跳过重型 Remotion 生成，适合产品演示/口播快装"
+      }
+    },
+    {
+      "id": "video_fast_qc",
+      "name": "09b 快装质量门禁",
+      "category": "知识讲解全流程",
+      "executor": "quality",
+      "kind": "quality",
+      "description": "对快装成片做代码化质量门禁：freezedetect 静态比例 + 真实操作录屏存在性；不达标直接阻断。",
+      "requires": [
+        "episodes/{stem}-fast.mp4",
+        "episodes/{stem}-capture.json"
+      ],
+      "artifacts": [
+        "episodes/{stem}-quality.json"
+      ],
+      "plain": {
+        "一句话": "代码检查快装成片是不是静态太多",
+        "产出什么": "episodes/{stem}-quality.json",
+        "新手提示": "静态比例>50%直接失败，不会进入交付"
+      }
+    },
+    {
+      "id": "video_qc_auto",
+      "name": "10b 确定性技术质检",
+      "category": "知识讲解全流程",
+      "executor": "qc_auto",
+      "kind": "qc",
+      "description": "用 qc_skill CLI 确定性跑技术检查，不调用模型；内容复核需用户/视觉签核。",
+      "requires": [
+        "episodes/{stem}.mp4",
+        "episodes/{stem}-captions.srt"
+      ],
+      "artifacts": [
+        "episodes/{stem}-qc.json",
+        "episodes/{stem}-qc.md",
+        "artifacts/{run_id}/qc-frames"
+      ],
+      "plain": {
+        "一句话": "不靠模型的 ffprobe/ffmpeg 技术体检",
+        "产出什么": "qc.json/qc.md/qc-frames",
+        "新手提示": "技术检查分钟级；内容视觉仍要人看"
+      }
+    },
+    {
+      "id": "stable_report_brief",
+      "name": "01 确定资料卡主题",
+      "category": "稳定工作流",
+      "executor": "report_brief",
+      "kind": "deterministic",
+      "version": 1,
+      "description": "从任务名/回答确定资料卡主题，不调用模型。",
+      "requires": [],
+      "artifacts": [
+        "episodes/{stem}-report-brief.json"
+      ],
+      "plain": {
+        "一句话": "确定这次资料卡要整理什么",
+        "产出什么": "report-brief.json",
+        "新手提示": "不需要大模型"
+      }
+    },
+    {
+      "id": "stable_report_digest",
+      "name": "02 整理知识库资料卡",
+      "category": "稳定工作流",
+      "executor": "report_digest",
+      "kind": "deterministic",
+      "version": 1,
+      "description": "读取 shared + 当前任务知识库，生成带引用的资料卡，不调用模型。",
+      "requires": [
+        "episodes/{stem}-report-brief.json"
+      ],
+      "artifacts": [
+        "episodes/{stem}-digest.md",
+        "episodes/{stem}-digest.json"
+      ],
+      "plain": {
+        "一句话": "把知识库资料整理成带引用的卡",
+        "产出什么": "digest.md + digest.json",
+        "新手提示": "确定性步骤，重复运行结果一致"
+      }
+    },
+    {
+      "id": "stable_report_qc",
+      "name": "03 资料卡 QC",
+      "category": "稳定工作流",
+      "executor": "report_qc",
+      "kind": "quality",
+      "version": 1,
+      "description": "检查标题、范围、引用、非空占位、字数。",
+      "requires": [
+        "episodes/{stem}-digest.md",
+        "episodes/{stem}-digest.json"
+      ],
+      "artifacts": [
+        "episodes/{stem}-report-quality.json"
+      ],
+      "plain": {
+        "一句话": "代码检查资料卡是否完整",
+        "产出什么": "report-quality.json",
+        "新手提示": "不通过会阻断交付"
+      }
+    },
+    {
+      "id": "stable_report_deliver",
+      "name": "04 交付资料卡",
+      "category": "稳定工作流",
+      "executor": "report_deliver",
+      "kind": "delivery",
+      "version": 1,
+      "description": "把资料卡复制为最终报告并写交付清单。",
+      "requires": [
+        "episodes/{stem}-digest.md"
+      ],
+      "artifacts": [
+        "episodes/{stem}-report.md",
+        "episodes/{stem}-report-manifest.json"
+      ],
+      "plain": {
+        "一句话": "交付最终报告",
+        "产出什么": "report.md + manifest",
+        "新手提示": "只有 QC 通过才会到这里"
+      }
+    }
+  ]
+}

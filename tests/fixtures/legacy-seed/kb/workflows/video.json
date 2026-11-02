@@ -1,0 +1,192 @@
+{
+  "id": "video",
+  "name": "视频制作",
+  "description": "当前默认工作流（已从旧画布迁移）",
+  "created": "2026-10-29T23:18:53",
+  "updated": "2026-10-30T00:24:33",
+  "graph": {
+    "name": "知识讲解视频 · GitHub Skills 工作流",
+    "nodes": [
+      {
+        "id": "video_brief",
+        "module": "video_brief",
+        "x": 23.626666666666665,
+        "y": 0
+      },
+      {
+        "id": "video_research",
+        "module": "video_research",
+        "x": 400,
+        "y": 70
+      },
+      {
+        "id": "video_script",
+        "module": "video_script",
+        "x": 740,
+        "y": 70
+      },
+      {
+        "id": "video_storyboard",
+        "module": "video_storyboard",
+        "x": 1080,
+        "y": 70
+      },
+      {
+        "id": "video_visuals",
+        "module": "video_visuals",
+        "x": 60,
+        "y": 310
+      },
+      {
+        "id": "video_voice",
+        "module": "video_voice",
+        "x": 400,
+        "y": 310
+      },
+      {
+        "id": "video_captions",
+        "module": "video_captions",
+        "x": 740,
+        "y": 310
+      },
+      {
+        "id": "video_edit",
+        "module": "video_edit",
+        "x": 1080,
+        "y": 310
+      },
+      {
+        "id": "video_render",
+        "module": "video_render",
+        "x": 60,
+        "y": 550
+      },
+      {
+        "id": "video_qc",
+        "module": "video_qc",
+        "x": 400,
+        "y": 550
+      },
+      {
+        "id": "video_delivery",
+        "module": "video_delivery",
+        "x": 740,
+        "y": 550
+      },
+      {
+        "id": "video_capture",
+        "module": "video_capture",
+        "x": 570.0,
+        "y": 480,
+        "name": "04b 采集真实界面"
+      }
+    ],
+    "edges": [
+      {
+        "from": "video_brief",
+        "to": "video_research"
+      },
+      {
+        "from": "video_brief",
+        "to": "video_script"
+      },
+      {
+        "from": "video_research",
+        "to": "video_script"
+      },
+      {
+        "from": "video_script",
+        "to": "video_storyboard"
+      },
+      {
+        "from": "video_storyboard",
+        "to": "video_visuals"
+      },
+      {
+        "from": "video_brief",
+        "to": "video_voice"
+      },
+      {
+        "from": "video_script",
+        "to": "video_voice"
+      },
+      {
+        "from": "video_voice",
+        "to": "video_captions"
+      },
+      {
+        "from": "video_script",
+        "to": "video_captions"
+      },
+      {
+        "from": "video_visuals",
+        "to": "video_edit"
+      },
+      {
+        "from": "video_voice",
+        "to": "video_edit"
+      },
+      {
+        "from": "video_captions",
+        "to": "video_edit"
+      },
+      {
+        "from": "video_storyboard",
+        "to": "video_edit"
+      },
+      {
+        "from": "video_edit",
+        "to": "video_render"
+      },
+      {
+        "from": "video_render",
+        "to": "video_qc"
+      },
+      {
+        "from": "video_captions",
+        "to": "video_qc"
+      },
+      {
+        "from": "video_script",
+        "to": "video_qc"
+      },
+      {
+        "from": "video_brief",
+        "to": "video_qc"
+      },
+      {
+        "from": "video_qc",
+        "to": "video_delivery"
+      },
+      {
+        "from": "video_render",
+        "to": "video_delivery"
+      },
+      {
+        "from": "video_edit",
+        "to": "video_delivery"
+      },
+      {
+        "from": "video_captions",
+        "to": "video_delivery"
+      },
+      {
+        "from": "video_script",
+        "to": "video_delivery"
+      },
+      {
+        "from": "video_research",
+        "to": "video_delivery"
+      },
+      {
+        "from": "video_storyboard",
+        "to": "video_capture"
+      },
+      {
+        "from": "video_capture",
+        "to": "video_visuals"
+      }
+    ]
+  },
+  "tier": "experimental"
+}

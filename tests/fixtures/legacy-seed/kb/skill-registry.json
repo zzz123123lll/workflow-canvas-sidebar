@@ -1,0 +1,149 @@
+{
+  "version": 1,
+  "skills": [
+    {
+      "id": "director",
+      "root": "skills/director",
+      "entry": "SKILL.md",
+      "source_url": "local:original-test-fixture",
+      "commit": "7d31e1f034ba64c86ce830fa8ea5b3ff3beabd9472381d0be8f58be0c9bb4cc3",
+      "license": "MIT",
+      "files_sha256": {
+        "SKILL.md": "95fc8a627dde933d18d5c405a28ffb41e3a2a9c8a8f185d38b927d68ec911e2d"
+      },
+      "source_kind": "synthetic-content-pin"
+    },
+    {
+      "id": "edge-tts",
+      "root": "skills/edge-tts",
+      "entry": "SKILL.md",
+      "source_url": "local:original-test-fixture",
+      "commit": "1017d6ef446f7ac938328769de0807155f7efff17fcf84eda63d09da1da905e6",
+      "license": "MIT",
+      "files_sha256": {
+        "SKILL.md": "93620aabbe948c27d157faf845341cee26b773e370be48dc57c674d013d071ac"
+      },
+      "source_kind": "synthetic-content-pin"
+    },
+    {
+      "id": "ffmpeg",
+      "root": "skills/ffmpeg",
+      "entry": "SKILL.md",
+      "source_url": "local:original-test-fixture",
+      "commit": "cc24b2500b44a90382cdf9d9b5f4cd51a23d14919da460623b5f76c1bddb6f37",
+      "license": "MIT",
+      "files_sha256": {
+        "SKILL.md": "92160c192e923da725532ef26ea0e3b0d86b147f0c4d971e4665c6062f637ce7"
+      },
+      "source_kind": "synthetic-content-pin"
+    },
+    {
+      "id": "qc",
+      "root": "skills/qc",
+      "entry": "SKILL.md",
+      "source_url": "local:original-test-fixture",
+      "commit": "8692e47c803c85309a939d012e0c9994b909ff1d84e0070d1a4a0da7c4f9590a",
+      "license": "MIT",
+      "files_sha256": {
+        "SKILL.md": "d746331d09375ed3a19d388de35ac40b06762f7e523b5a568e8c840f23e60af8"
+      },
+      "source_kind": "synthetic-content-pin"
+    },
+    {
+      "id": "remotion-best-practices",
+      "root": "skills/remotion-best-practices",
+      "entry": "SKILL.md",
+      "source_url": "local:original-test-fixture",
+      "commit": "953a089c235707373c63b33dffb576598f05e9c70f75e6f8703d9059d88c1d11",
+      "license": "MIT",
+      "files_sha256": {
+        "SKILL.md": "ba2fda0099dbd2c2e551bd6113b49b6dd04808b1acb8c04accc08283dd29aa25"
+      },
+      "source_kind": "synthetic-content-pin"
+    },
+    {
+      "id": "remotion-captions",
+      "root": "skills/remotion-captions",
+      "entry": "SKILL.md",
+      "source_url": "local:original-test-fixture",
+      "commit": "f9221ef84a96716adc08a6a1d395354b3408c25926dd6bbaed190dcc568e2fb6",
+      "license": "MIT",
+      "files_sha256": {
+        "SKILL.md": "13dc9bc33f1f4d2878be52bd322c51f05c832791c63940a5945c9ed84e1a33af"
+      },
+      "source_kind": "synthetic-content-pin"
+    },
+    {
+      "id": "remotion-create",
+      "root": "skills/remotion-create",
+      "entry": "SKILL.md",
+      "source_url": "local:original-test-fixture",
+      "commit": "58f08706062798fa024c425ff461828a74dd3d725b47f687d00dd63012f9584d",
+      "license": "MIT",
+      "files_sha256": {
+        "SKILL.md": "819bcf0e41db6ec6df983aeb2471915f75ae9b779e8fc44fad85410bb25cadd2"
+      },
+      "source_kind": "synthetic-content-pin"
+    },
+    {
+      "id": "remotion-markup",
+      "root": "skills/remotion-markup",
+      "entry": "SKILL.md",
+      "source_url": "local:original-test-fixture",
+      "commit": "e6f5bb210e3088c8c04b40b1c1fca9e4b33ff8b7117541d3f8349111dc2bd7ec",
+      "license": "MIT",
+      "files_sha256": {
+        "SKILL.md": "5a0c500af288fee76557379567cb93c77ad35959fe601c7fb5daecdd16a062f2"
+      },
+      "source_kind": "synthetic-content-pin"
+    },
+    {
+      "id": "remotion-multimedia",
+      "root": "skills/remotion-multimedia",
+      "entry": "SKILL.md",
+      "source_url": "local:original-test-fixture",
+      "commit": "ce425d8ae83678e706d90e6f42962be2130900f689232c287f73bc2bca686cb0",
+      "license": "MIT",
+      "files_sha256": {
+        "SKILL.md": "8188a862e3434ce16f3fdfebf5af02445bc290ab06802cf5faf525003f3b40b6"
+      },
+      "source_kind": "synthetic-content-pin"
+    },
+    {
+      "id": "remotion-render",
+      "root": "skills/remotion-render",
+      "entry": "SKILL.md",
+      "source_url": "local:original-test-fixture",
+      "commit": "6307959c02e386b6be91c2bd4c807d5a3a0c2f9a4aecb12a2d6e6aae3970b352",
+      "license": "MIT",
+      "files_sha256": {
+        "SKILL.md": "c2eb0e38fe75da89a9d15dd0928d25afe3c1864c5816ce29213227c4a8638920"
+      },
+      "source_kind": "synthetic-content-pin"
+    },
+    {
+      "id": "tavily-cli",
+      "root": "skills/tavily-cli",
+      "entry": "SKILL.md",
+      "source_url": "local:original-test-fixture",
+      "commit": "cf634e282cd25243d23fdf8bcd96b6a2e3f6d3576199b7ee24bb5bc13cb8fc16",
+      "license": "MIT",
+      "files_sha256": {
+        "SKILL.md": "6b9330fc171377b004b43b9ecf2650ca894d1636c8f48c273676900e83ecd3b1"
+      },
+      "source_kind": "synthetic-content-pin"
+    },
+    {
+      "id": "tavily-search",
+      "root": "skills/tavily-search",
+      "entry": "SKILL.md",
+      "source_url": "local:original-test-fixture",
+      "commit": "544c3b5fd3bebe0a7f29353904c5868a3da5a418f40435d16ae69419f238ece3",
+      "license": "MIT",
+      "files_sha256": {
+        "SKILL.md": "e88ba6e15ee26efdd15cc5787c2eeca0eef2b8eb270745f875847425bb6c1c98"
+      },
+      "source_kind": "synthetic-content-pin"
+    }
+  ]
+}

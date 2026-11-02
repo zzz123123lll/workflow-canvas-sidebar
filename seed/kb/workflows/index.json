@@ -1,0 +1,36 @@
+{
+  "active": "wc17-article",
+  "workflows": [
+    {
+      "id": "wc17-article",
+      "name": "资料到文章",
+      "description": "理解资料→撰写正文和来源→内容审阅→交付。可先用原创共享示例，再替换项目资料。",
+      "tier": "built-in",
+      "capability": "内置可用",
+      "model_steps": 2
+    },
+    {
+      "id": "wc17-motion-video",
+      "name": "简短动态图形视频",
+      "description": "30秒/640×360/15fps；分镜字幕→原创工程→实际渲染，字幕和轻柔提示音，无旁白。先配置Node、Chrome、FFmpeg和Remotion。",
+      "tier": "configured",
+      "capability": "配置后可用",
+      "model_steps": 3,
+      "required_tools": [
+        "node",
+        "chrome",
+        "ffmpeg",
+        "ffprobe",
+        "remotion_dependencies"
+      ]
+    },
+    {
+      "id": "wc17-file-task",
+      "name": "自定义文件任务",
+      "description": "一个可修改的通用AI模块，将项目资料整理为Markdown和JSON；可复制节点并增加下一步。",
+      "tier": "built-in",
+      "capability": "内置可用",
+      "model_steps": 1
+    }
+  ]
+}

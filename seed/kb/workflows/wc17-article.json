@@ -1,0 +1,33 @@
+{
+  "id": "wc17-article",
+  "name": "资料到文章",
+  "description": "理解资料→撰写正文和来源→内容审阅→交付。可先用原创共享示例，再替换项目资料。",
+  "tier": "built-in",
+  "capability": "内置可用",
+  "model_steps": 2,
+  "graph": {
+    "nodes": [
+      {
+        "id": "analysis",
+        "module": "wc17-article-analysis",
+        "x": 80,
+        "y": 160
+      },
+      {
+        "id": "writing",
+        "module": "wc17-article-writing",
+        "x": 430,
+        "y": 160,
+        "input_bindings": {
+          "episodes/{stem}-facts.json": "analysis"
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "analysis",
+        "to": "writing"
+      }
+    ]
+  }
+}

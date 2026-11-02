@@ -1,0 +1,36 @@
+runtime/
+canvas-home.json
+.canvas-instance.json
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+node_modules/
+dist/
+.build/
+.cache/
+.runs/
+artifacts/
+episodes/
+*.log
+*.sqlite3*
+*.bak*
+*.zip
+.env
+.env.*
+!.env.example
+
+# Legacy vendor bundles are not part of the open-source distribution.
+seed/skills/vendor/
+seed/kb/workflows/video.json
+seed/kb/workflows/video-fast.json
+seed/kb/workflows/video-qc-auto.json
+seed/kb/workflows/knowledge-digest.json
+
+# Historical local evidence is retained locally, outside the public source.
+docs/v0.16.0/
+
+seed/kb/workflows/article.json
+seed/kb/workflows/motion-video.json
+seed/kb/workflows/file-task.json

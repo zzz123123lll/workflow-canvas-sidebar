@@ -1,0 +1,25 @@
+{
+  "nodes": [
+    {
+      "id": "analysis",
+      "module": "wc17-article-analysis",
+      "x": 80,
+      "y": 160
+    },
+    {
+      "id": "writing",
+      "module": "wc17-article-writing",
+      "x": 430,
+      "y": 160,
+      "input_bindings": {
+        "episodes/{stem}-facts.json": "analysis"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "analysis",
+      "to": "writing"
+    }
+  ]
+}

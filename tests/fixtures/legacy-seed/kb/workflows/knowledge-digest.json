@@ -1,0 +1,61 @@
+{
+  "id": "knowledge-digest",
+  "name": "资料卡-稳定版",
+  "description": "不调用大模型的资料卡工作流：shared+task 知识库 → 带引用资料卡 → 确定性 QC → 交付",
+  "tier": "stable",
+  "created": "2026-10-30T04:24:52",
+  "updated": "2026-10-30T04:24:52",
+  "graph": {
+    "nodes": [
+      {
+        "id": "r_brief",
+        "module": "stable_report_brief",
+        "x": 80,
+        "y": 200,
+        "name": "01 确定资料卡主题"
+      },
+      {
+        "id": "r_digest",
+        "module": "stable_report_digest",
+        "x": 420,
+        "y": 200,
+        "name": "02 整理知识库资料卡"
+      },
+      {
+        "id": "r_qc",
+        "module": "stable_report_qc",
+        "x": 760,
+        "y": 200,
+        "name": "03 资料卡 QC"
+      },
+      {
+        "id": "r_deliver",
+        "module": "stable_report_deliver",
+        "x": 1100,
+        "y": 200,
+        "name": "04 交付资料卡"
+      }
+    ],
+    "edges": [
+      {
+        "from": "r_brief",
+        "to": "r_digest"
+      },
+      {
+        "from": "r_digest",
+        "to": "r_qc"
+      },
+      {
+        "from": "r_qc",
+        "to": "r_deliver"
+      }
+    ]
+  },
+  "stability_evidence": {
+    "runs": 3,
+    "nodes_passed": 4,
+    "qc": "PASS",
+    "digest_sha256": "d3c5579172e4860fa1002602c16430ed21778fbb7ab8a5f0581fd88cde28ef59",
+    "verified_at": "2026-10-30T04:25:01"
+  }
+}

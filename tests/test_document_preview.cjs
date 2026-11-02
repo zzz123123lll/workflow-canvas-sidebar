@@ -1,0 +1,14 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const source=fs.readFileSync(require('node:path').join(__dirname,'../client.js'),'utf8');
+const context={h:(type,props,...children)=>({type,props,children}),C:{text:'#fff',border:'#333',card:'#111',teal:'#0ff',sub:'#aaa'}};
+const start=source.indexOf('    function readableDocument(');
+assert.ok(start>=0,'The actual UI must provide a readable Markdown preview');
+vm.runInNewContext(source.slice(start,source.indexOf('    function Icon(',start)),context);
+const tree=context.readableDocument('# Title\n\n| Name | Value |\n|---|---|\n| Topic | **Canvas** |\n\n<script>bad()</script>');
+const text=JSON.stringify(tree);
+assert.ok(text.includes('"type":"h1"'));
+assert.ok(text.includes('"type":"table"'));
+assert.ok(text.includes('"type":"strong"'));
+assert.ok(!text.includes('dangerouslySetInnerHTML'));
+assert.ok(text.includes('<script>bad()</script>'),'HTML remains a text child, never executable HTML');
+console.log('Readable document preview contracts passed');

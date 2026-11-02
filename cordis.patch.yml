@@ -1,0 +1,4 @@
+# dsh-workflow-canvas-sidebar bundle patch: inserts the CLI row into the profile.
+- insert:
+    - id: dsh-workflow-canvas-sidebar
+      name: 'dsh-workflow-canvas-sidebar'

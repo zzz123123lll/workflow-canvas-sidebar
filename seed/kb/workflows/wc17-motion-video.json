@@ -1,0 +1,59 @@
+{
+  "id": "wc17-motion-video",
+  "name": "简短动态图形视频",
+  "description": "30秒/640×360/15fps；分镜字幕→原创工程→实际渲染，字幕和轻柔提示音，无旁白。先配置Node、Chrome、FFmpeg和Remotion。",
+  "tier": "configured",
+  "capability": "配置后可用",
+  "model_steps": 3,
+  "required_tools": [
+    "node",
+    "chrome",
+    "ffmpeg",
+    "ffprobe",
+    "remotion_dependencies"
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "plan",
+        "module": "wc17-motion-plan",
+        "x": 80,
+        "y": 160
+      },
+      {
+        "id": "design",
+        "module": "wc17-motion-design",
+        "x": 400,
+        "y": 160,
+        "input_bindings": {
+          "episodes/{stem}-storyboard.json": "plan",
+          "episodes/{stem}-captions.srt": "plan"
+        }
+      },
+      {
+        "id": "render",
+        "module": "wc17-motion-render",
+        "x": 720,
+        "y": 160,
+        "input_bindings": {
+          "episodes/{stem}-project": "design",
+          "episodes/{stem}-captions.srt": "plan"
+        }
+      }
+    ],
+    "edges": [
+      {
+        "from": "plan",
+        "to": "design"
+      },
+      {
+        "from": "design",
+        "to": "render"
+      },
+      {
+        "from": "plan",
+        "to": "render"
+      }
+    ]
+  }
+}

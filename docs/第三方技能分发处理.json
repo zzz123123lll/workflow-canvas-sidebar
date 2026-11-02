@@ -1,0 +1,110 @@
+[
+  {
+    "id": "director",
+    "source_url": "https://github.com/wuwangzhang1216/DirectorSKILL/tree/c65ae0d14457053efb1e354c7e7f7e120d97fad1",
+    "commit": "c65ae0d14457053efb1e354c7e7f7e120d97fad1",
+    "declared_license": "MIT",
+    "manifest_sha256": "06dca792cce4ccaa25e43840f976615ed293cfbf73cfbf646922514b311cb787",
+    "decision": "not-distributed",
+    "reason": "首发模板已使用原创职责与指南；此第三方文档不进入源码或安装资产，原本机安装不变。"
+  },
+  {
+    "id": "tavily-search",
+    "source_url": "https://github.com/tavily-ai/skills/tree/778122e5f9c680f541eeceda5a5b36405eb7980c/skills/tavily-search",
+    "commit": "778122e5f9c680f541eeceda5a5b36405eb7980c",
+    "declared_license": "MIT",
+    "manifest_sha256": "08276e6d02dfff6894ad8ef84df444812ba8ee3f9eeeafc49910a67b9f81f482",
+    "decision": "not-distributed",
+    "reason": "首发模板已使用原创职责与指南；此第三方文档不进入源码或安装资产，原本机安装不变。"
+  },
+  {
+    "id": "remotion-create",
+    "source_url": "https://github.com/remotion-dev/skills/tree/30d4553ecd46fbc5212fd0ff006ae43af522158b/skills/remotion-create",
+    "commit": "30d4553ecd46fbc5212fd0ff006ae43af522158b",
+    "declared_license": "NOASSERTION",
+    "manifest_sha256": "74816ef1b719a0d616efac3b6417a960400a63648d5b92002ba9f5375e61ea73",
+    "decision": "not-distributed",
+    "reason": "首发模板已使用原创职责与指南；此第三方文档不进入源码或安装资产，原本机安装不变。"
+  },
+  {
+    "id": "remotion-markup",
+    "source_url": "https://github.com/remotion-dev/skills/tree/30d4553ecd46fbc5212fd0ff006ae43af522158b/skills/remotion-markup",
+    "commit": "30d4553ecd46fbc5212fd0ff006ae43af522158b",
+    "declared_license": "NOASSERTION",
+    "manifest_sha256": "511e90d8bafa4b2d77998180bb7be49d93c490ee17e37cda2c55d6c949ac13fb",
+    "decision": "not-distributed",
+    "reason": "首发模板已使用原创职责与指南；此第三方文档不进入源码或安装资产，原本机安装不变。"
+  },
+  {
+    "id": "remotion-captions",
+    "source_url": "https://github.com/remotion-dev/skills/tree/30d4553ecd46fbc5212fd0ff006ae43af522158b/skills/remotion-captions",
+    "commit": "30d4553ecd46fbc5212fd0ff006ae43af522158b",
+    "declared_license": "NOASSERTION",
+    "manifest_sha256": "cd83fc772b972832f62e1854ee9fbfe63ab886815a93859baa3cc8fd3c23e560",
+    "decision": "not-distributed",
+    "reason": "首发模板已使用原创职责与指南；此第三方文档不进入源码或安装资产，原本机安装不变。"
+  },
+  {
+    "id": "remotion-multimedia",
+    "source_url": "https://github.com/remotion-dev/skills/tree/30d4553ecd46fbc5212fd0ff006ae43af522158b/skills/remotion-multimedia",
+    "commit": "30d4553ecd46fbc5212fd0ff006ae43af522158b",
+    "declared_license": "NOASSERTION",
+    "manifest_sha256": "32c286e6c5b51062b7612495b8d95f09ce44f24760e31909a9e22832f7531e0e",
+    "decision": "not-distributed",
+    "reason": "首发模板已使用原创职责与指南；此第三方文档不进入源码或安装资产，原本机安装不变。"
+  },
+  {
+    "id": "remotion-best-practices",
+    "source_url": "https://github.com/remotion-dev/skills/tree/30d4553ecd46fbc5212fd0ff006ae43af522158b/skills/remotion-best-practices",
+    "commit": "30d4553ecd46fbc5212fd0ff006ae43af522158b",
+    "declared_license": "NOASSERTION",
+    "manifest_sha256": "bb36c5d5bc36b29aea3bb64c81a14171810f1fe6dc23b7d2fe7e9c1d1135d74b",
+    "decision": "not-distributed",
+    "reason": "首发模板已使用原创职责与指南；此第三方文档不进入源码或安装资产，原本机安装不变。"
+  },
+  {
+    "id": "remotion-render",
+    "source_url": "https://github.com/remotion-dev/skills/tree/30d4553ecd46fbc5212fd0ff006ae43af522158b/skills/remotion-render",
+    "commit": "30d4553ecd46fbc5212fd0ff006ae43af522158b",
+    "declared_license": "NOASSERTION",
+    "manifest_sha256": "638a8343d4e4093864ff743446169e0885ba8c8ed4b90612fc0c852f62dfb00e",
+    "decision": "not-distributed",
+    "reason": "首发模板已使用原创职责与指南；此第三方文档不进入源码或安装资产，原本机安装不变。"
+  },
+  {
+    "id": "edge-tts",
+    "source_url": "https://github.com/aahl/skills/tree/47edd621dff44253677d2ed14c223393ca020407/skills/edge-tts",
+    "commit": "47edd621dff44253677d2ed14c223393ca020407",
+    "declared_license": "MIT",
+    "manifest_sha256": "5f9328b72efbe15b6eb4951319248870f2f55b9d036aaf4599a2ce526fb71235",
+    "decision": "not-distributed",
+    "reason": "首发模板已使用原创职责与指南；此第三方文档不进入源码或安装资产，原本机安装不变。"
+  },
+  {
+    "id": "qc",
+    "source_url": "https://github.com/kajisho5/qc-skill/tree/69d904738256116d4ee8c496aa5c1c02a756007a",
+    "commit": "69d904738256116d4ee8c496aa5c1c02a756007a",
+    "declared_license": "MIT",
+    "manifest_sha256": "7b968875fefeb4ebde20f77cfa769a9469f652bc98b9385629e55675b5a0053a",
+    "decision": "not-distributed",
+    "reason": "首发模板已使用原创职责与指南；此第三方文档不进入源码或安装资产，原本机安装不变。"
+  },
+  {
+    "id": "ffmpeg",
+    "source_url": "https://github.com/kajisho5/ffmpeg-skill/tree/1ae1bdf1ca0adbb1606fbca493948b1bbb2f83ff",
+    "commit": "1ae1bdf1ca0adbb1606fbca493948b1bbb2f83ff",
+    "declared_license": "MIT",
+    "manifest_sha256": "2139411312138f6731a7485293f2066e5fd2bb17f73aa34dfed808bbceec1449",
+    "decision": "not-distributed",
+    "reason": "首发模板已使用原创职责与指南；此第三方文档不进入源码或安装资产，原本机安装不变。"
+  },
+  {
+    "id": "tavily-cli",
+    "source_url": "https://github.com/tavily-ai/skills/tree/778122e5f9c680f541eeceda5a5b36405eb7980c/skills/tavily-cli",
+    "commit": "778122e5f9c680f541eeceda5a5b36405eb7980c",
+    "declared_license": "MIT",
+    "manifest_sha256": "9fa4794d42bcaf84e717691ea7e688a3c7f2997f39f8e1133f4768a2586fe42d",
+    "decision": "not-distributed",
+    "reason": "首发模板已使用原创职责与指南；此第三方文档不进入源码或安装资产，原本机安装不变。"
+  }
+]

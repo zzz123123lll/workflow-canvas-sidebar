@@ -1,0 +1,75 @@
+{
+  "name": "dsh-workflow-canvas-sidebar",
+  "version": "0.17.0-rc.1",
+  "description": "模块工作区、独立 AI 会话、知识资料与成果交付的工作流画布",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "verify": "python scripts/verify.py",
+    "build": "python scripts/build.py --output dist"
+  },
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./package.json": "./package.json",
+    "./cordis.patch.yml": "./cordis.patch.yml"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "host-sessions.js",
+    "loopback-http.js",
+    "cordis.patch.yml",
+    "server/**",
+    "requirements.txt",
+    "README.md",
+    "docs/**",
+    "CHANGELOG.md",
+    "install.ps1",
+    "register-plugin.ps1",
+    "runtime/**",
+    "migrate-canvas-home.ps1",
+    "preflight-canvas.ps1",
+    "uninstall-canvas-plugin.ps1",
+    "tests/**",
+    "seed/kb/modules.json",
+    "seed/kb/canvas-workflow.json",
+    "seed/kb/canvas-templates.json",
+    "seed/kb/skill-registry.json",
+    "seed/kb/spec-library.json",
+    "seed/kb/workflows/index.json",
+    "seed/kb/knowledge/shared/**",
+    "install.cmd",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md",
+    "dependencies.lock.json",
+    "requirements.lock.txt",
+    "requirements-dev.txt",
+    "RELEASE_NOTES.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "README.en.md",
+    "scripts/**",
+    "seed/kb/workflows/wc17-article.json",
+    "seed/kb/workflows/wc17-motion-video.json",
+    "seed/kb/workflows/wc17-file-task.json",
+    "third_party/**",
+    "requirements-dev.lock.txt",
+    "development.lock.json"
+  ],
+  "license": "MIT",
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [],
+      "immediately": true
+    }
+  },
+  "engines": {
+    "dsh": "0.2.1-rc.5"
+  }
+}
